@@ -285,9 +285,9 @@
         // --- Data ---
         const timelineItems = [
             { type: 'education', startYear: 2023, endYear: 2025, date: 'Sep 2023 - May 2025', title: 'Master of Science, Computer Engineering', company: 'New York University (NYU)', description: 'Relevant Coursework: Machine Learning, Internet Architecture Protocol, Data Structure and Algorithm, Real-time Embedded Systems, Computer Systems Architecture, Intro to Java, VLSI System Design, Advanced Topics of Computer Vision, Big Data, Database Management Systems.', tags: ['Tandon School of Engineering'], color: 'purple' },
-            { type: 'experience', startYear: 2024, endYear: 2024, date: 'Jun 2024 - Aug 2024', title: 'Machine Learning Intern', company: 'Dassault Systèmes', description: 'Engineered an offline NLP assistant to slash manual lookup times for engineers. Fine-tuned a BERT model for domain-specific search, achieving high accuracy and reliability within a constrained network.', tags: ['~90% Accuracy', '-40% Lookup Time', '+35% Test Coverage'], color: 'blue' },
-            { type: 'experience', startYear: 2021, endYear: 2023, date: 'Dec 2021 - Aug 2023', title: 'software Engineering Intern', company: 'Scanpoint Geomatics Ltd', description: 'Automated ingestion and processing pipelines for massive geospatial datasets (40-60 GB/week). Trained and tuned YOLOv8 & U-Net models for crop detection and segmentation, delivering actionable map layers to over 500 field surveyors.', tags: ['+22% F1 Score', '-30% Failed Runs', '500+ Users'], color: 'green' },
-            { type: 'experience', startYear: 2021, endYear: 2021, date: 'Jul 2021 - Dec 2021', title: 'Software Engineering  Intern', company: 'Cmarix Technolabs Pvt Ltd', description: 'Improved frontend performance and maintainability for client web apps. Refactored 5k+ lines of code, introduced lazy loading and code-splitting, and standardized UI components to reduce bugs and improve user experience.', tags: ['-18% Bundle Size', '+25% FCP', '-30% UI Issues'], color: 'purple' },
+            { type: 'experience', startYear: 2024, endYear: 2024, date: 'Jun 2024 - Aug 2024', title: 'Software Development Intern', company: 'Dassault Systèmes', description: 'Engineered an offline NLP assistant to slash manual lookup times for engineers. Fine-tuned a BERT model for domain-specific search, achieving high accuracy and reliability within a constrained network.', tags: ['~90% Accuracy', '-40% Lookup Time', '+35% Test Coverage'], color: 'blue' },
+            { type: 'experience', startYear: 2022, endYear: 2023, date: 'Dec 2021 - Aug 2023', title: 'Machine Learning Intern', company: 'Scanpoint Geomatics Ltd', description: 'Automated ingestion and processing pipelines for massive geospatial datasets (40-60 GB/week). Trained and tuned YOLOv8 & U-Net models for crop detection and segmentation, delivering actionable map layers to over 500 field surveyors.', tags: ['+22% F1 Score', '-30% Failed Runs', '500+ Users'], color: 'green' },
+            { type: 'experience', startYear: 2021, endYear: 2021, date: 'Jul 2021 - Dec 2021', title: 'Software Development Engineer Intern', company: 'Cmarix Technolabs Pvt Ltd', description: 'Improved frontend performance and maintainability for client web apps. Refactored 5k+ lines of code, introduced lazy loading and code-splitting, and standardized UI components to reduce bugs and improve user experience.', tags: ['-18% Bundle Size', '+25% FCP', '-30% UI Issues'], color: 'purple' },
             { type: 'education', startYear: 2019, endYear: 2023, date: '2019 - 2023', title: 'Bachelor of Technology, Information Technology', company: 'SRM Institute of Science & Technology (SRMIST)', description: 'Relevant Coursework: Object Oriented Design and Programming, Operating Systems, Software Engineering, AI. <br><br><strong>On-Campus Activity:</strong> As an <strong>Instructor for AI in Robotics</strong>, I led sessions for 200+ students on microcontroller programming (ESP32), sensors, and computer vision with Python/OpenCV, mentoring teams through hands-on builds.', tags: ['IT Department', 'Teaching', 'Mentorship'], color: 'purple' }
         ];
         
@@ -296,11 +296,9 @@
 
         // --- Gemini API Integration (via Serverless Function) ---
         async function callGemini(prompt, retries = 3, delay = 1000) {
-            // UPDATED: Add a check for local development
             if (!window.location.hostname.includes('netlify.app') && !window.location.hostname.includes('truptacharya.com')) {
                 return "Portfolio Co-Pilot is only available on the live website.";
             }
-
             const apiUrl = `/.netlify/functions/call-gemini`;
             const payload = { prompt: prompt };
             try {
@@ -401,7 +399,6 @@
         const copilotInput = document.getElementById('copilot-input');
         const copilotResponse = document.getElementById('copilot-response');
         
-        // UPDATED: portfolioContext now dynamically builds from the timelineItems array
         const portfolioContext = `
             About Me: I'm an engineer passionate about building intelligent systems, with a focus on Machine Learning, AI, and Full Stack Development. My journey has taken me from architecting scalable backend platforms to fine-tuning complex NLP models. I am actively seeking opportunities as a Software Engineer, ML/AI Engineer, or Data Engineer where I can apply my skills to transform complex data into actionable insights and create meaningful, real-world solutions.
             Education & Experience:
@@ -424,8 +421,8 @@
         const timelineContainer = document.getElementById('timeline-container');
         const startYear = 2019;
         const endYear = 2025;
-        const yearHeight = 250; // pixels per year
-        const topPadding = 50; // pixels
+        const yearHeight = 250;
+        const topPadding = 50;
 
         timelineContainer.style.height = `${(endYear - startYear + 1) * yearHeight}px`;
 
@@ -449,6 +446,7 @@
             entry.style.top = `${topPos}px`;
             entry.style.height = `${height}px`;
 
+            // REVERTED: Inner HTML now shows summary text by default
             entry.innerHTML = `
                 <div class="timeline-content glass-effect p-6 rounded-lg shadow-lg h-full">
                     <div class="summary-view flex flex-col justify-center items-center h-full text-center">
@@ -514,14 +512,17 @@
             modal.classList.remove('hidden');
             modal.classList.add('flex');
             document.body.style.overflow = 'hidden';
+            
+            // UPDATED: Corrected the prompt for the "Explain this project" button
             document.getElementById('explain-project-btn').addEventListener('click', async function() {
                 const explanationDiv = document.getElementById('project-explanation');
                 showLoader(explanationDiv);
                 const projectContext = `Project Title: ${project.title}. Challenge: ${project.challenge}. Mission: ${project.mission}. Tech Used: ${project.tech.join(', ')}.`;
-                const prompt = `You are a helpful portfolio assistant... Explanation:`;
+                const prompt = `You are a helpful portfolio assistant. Explain the following project in simple, easy-to-understand terms for a non-technical audience. Keep it to 2-3 sentences.\n\nProject Details:\n${projectContext}\n\nExplanation:`;
                 const explanation = await callGemini(prompt);
                 explanationDiv.innerHTML = explanation.replace(/\n/g, '<br>');
             });
+
             const interactiveContainer = document.getElementById('interactive-container');
             if (project.interactive) { loadInteractiveElement(interactiveContainer, project.interactive); } 
             else { interactiveContainer.innerHTML = `<p class="text-center text-slate-400">Details for this project are available upon request.</p>`; }
