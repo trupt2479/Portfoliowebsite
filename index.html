@@ -4,24 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trupt Acharya | The Intelligence Engineer</title>
+    
+    <!-- Tab Icon (Favicon) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧑‍💻</text></svg>">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Three.js Library for 3D Animation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
             background-color: #0a0a0a;
             color: #e2e8f0;
         }
+        /* UPDATED: Canvas is now fixed to the viewport */
         #particle-canvas {
-            position: absolute;
+            position: fixed; /* Changed from absolute to fixed */
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: -1;
+        }
+        /* All other content needs a z-index to appear above the fixed canvas */
+        main, header {
+            position: relative;
+            z-index: 2;
         }
         .hero-content {
             position: relative;
@@ -65,7 +79,6 @@
         .copilot-input:focus {
             box-shadow: 0 0 0 2px #3b82f6;
         }
-        /* Scroll Animations */
         .scroll-animate {
             opacity: 0;
             transform: translateY(30px);
@@ -87,7 +100,6 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        /* Styles for project filter buttons */
         .filter-btn {
             transition: all 0.2s ease-in-out;
         }
@@ -108,6 +120,7 @@
     </style>
 </head>
 <body class="antialiased">
+    <!-- The canvas element remains, but will be controlled by three.js -->
     <canvas id="particle-canvas"></canvas>
 
     <!-- Header -->
@@ -142,7 +155,6 @@
                 <h1 class="text-4xl md:text-6xl font-bold text-white leading-tight">The Intelligence Engineer</h1>
                 <p class="mt-4 text-lg md:text-xl text-slate-400 max-w-3xl mx-auto">From Data to Decision: Crafting intelligent systems that bridge the gap between raw information and actionable insights.</p>
                 
-                <!-- NEW: Open to Opportunities Section -->
                 <div class="mt-8 max-w-3xl mx-auto bg-slate-800/50 border border-slate-700 rounded-lg p-4">
                     <h3 class="text-md font-semibold text-blue-300 mb-3">Seeking Opportunities In:</h3>
                     <div class="flex flex-wrap justify-center gap-2 md:gap-3">
@@ -171,7 +183,6 @@
                 <div class="md:col-span-1 flex justify-center">
                     <img src="assets/profile.jpg" alt="Trupt Acharya" class="rounded-full w-48 h-48 md:w-64 md:h-64 object-cover border-4 border-slate-700 shadow-lg">
                 </div>
-                <!-- UPDATED: About Me Text -->
                 <div class="md:col-span-2 text-slate-300 space-y-4 text-lg">
                     <p>I'm an engineer passionate about building intelligent systems, with a focus on <strong>Machine Learning</strong>, <strong>AI</strong>, and <strong>Full Stack Development</strong>. My journey has taken me from architecting scalable <strong>backend</strong> platforms to fine-tuning complex NLP models.</p>
                     <p>I am actively seeking opportunities as a <strong>Software Engineer</strong>, <strong>ML/AI Engineer</strong>, or <strong>Data Engineer</strong> where I can apply my skills to transform complex data into actionable insights and create meaningful, real-world solutions.</p>
@@ -182,16 +193,12 @@
         <!-- Experience Section -->
         <section id="experience" class="container mx-auto px-6 py-20 scroll-animate">
             <h2 class="text-3xl font-bold text-center text-white mb-16">My Journey</h2>
-            <div class="relative max-w-2xl mx-auto border-l-2 border-slate-700 pl-8">
-                <!-- Experience items here -->
-            </div>
+            <div class="relative max-w-2xl mx-auto border-l-2 border-slate-700 pl-8"></div>
         </section>
 
         <!-- Projects Section -->
         <section id="projects" class="container mx-auto px-6 py-20 scroll-animate">
             <h2 class="text-3xl font-bold text-center text-white mb-12">Project Arsenal</h2>
-            
-            <!-- NEW: Project Filter Buttons -->
             <div id="project-filters" class="flex flex-wrap justify-center gap-2 md:gap-4 mb-10">
                 <button class="filter-btn active bg-slate-700 hover:bg-slate-600 text-slate-200 font-medium py-2 px-4 rounded-full" data-filter="all">All Projects</button>
                 <button class="filter-btn bg-slate-700 hover:bg-slate-600 text-slate-200 font-medium py-2 px-4 rounded-full" data-filter="ai-ml">AI / ML</button>
@@ -199,10 +206,7 @@
                 <button class="filter-btn bg-slate-700 hover:bg-slate-600 text-slate-200 font-medium py-2 px-4 rounded-full" data-filter="data-eng">Data Engineering</button>
                 <button class="filter-btn bg-slate-700 hover:bg-slate-600 text-slate-200 font-medium py-2 px-4 rounded-full" data-filter="backend">Backend</button>
             </div>
-
-            <div id="projects-grid" class="relative grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Project Cards will be injected here by JS -->
-            </div>
+            <div id="projects-grid" class="relative grid md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
         </section>
 
         <!-- Contact Section -->
@@ -217,7 +221,6 @@
                         <span id="copy-btn-text">Copy</span>
                     </button>
                 </div>
-                <!-- UPDATED: Download Resume Button -->
                 <a href="assets/trupt_acharya_resume.pdf" download class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition-transform transform hover:scale-105 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                     Download Resume
@@ -236,52 +239,15 @@
 
     <!-- Modal -->
     <div id="project-modal" class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden items-center justify-center p-4">
-        <div id="modal-content" class="modal-content glass-effect rounded-lg shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
-            <!-- Modal content will be injected by JS -->
-        </div>
+        <div id="modal-content" class="modal-content glass-effect rounded-lg shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto"></div>
     </div>
 
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         // --- Data ---
-        const experiences = [
-            {
-                date: 'Jun 2024 - Aug 2024',
-                title: 'Software Development Intern',
-                company: 'Dassault Systèmes',
-                description: 'Engineered an offline NLP assistant to slash manual lookup times for engineers. Fine-tuned a BERT model for domain-specific search, achieving high accuracy and reliability within a constrained network.',
-                tags: ['~90% Accuracy', '-40% Lookup Time', '+35% Test Coverage'],
-                color: 'blue'
-            },
-            {
-                date: 'Dec 2021 - Aug 2023',
-                title: 'Machine Learning Intern',
-                company: 'Scanpoint Geomatics Ltd',
-                description: 'Automated ingestion and processing pipelines for massive geospatial datasets (40-60 GB/week). Trained and tuned YOLOv8 & U-Net models for crop detection and segmentation, delivering actionable map layers to over 500 field surveyors.',
-                tags: ['+22% F1 Score', '-30% Failed Runs', '500+ Users'],
-                color: 'green'
-            },
-            {
-                date: 'Jul 2021 - Dec 2021',
-                title: 'Software Development Engineer Intern',
-                company: 'Cmarix Technolabs Pvt Ltd',
-                description: 'Improved frontend performance and maintainability for client web apps. Refactored 5k+ lines of code, introduced lazy loading and code-splitting, and standardized UI components to reduce bugs and improve user experience.',
-                tags: ['-18% Bundle Size', '+25% FCP', '-30% UI Issues'],
-                color: 'purple'
-            }
-        ];
-        // UPDATED: Projects now have tags for filtering
-        const projects = [
-            { id: 'trip-planner', tags: ['ai-ml', 'full-stack'], title: 'AI-Powered Trip Planner', category: 'Full-stack AI Application', description: 'A web app that uses AI to generate personalized travel itineraries based on user preferences.', challenge: 'Eliminate the tedious manual research involved in travel planning by creating an intelligent, conversational agent that builds custom trips on the fly.', mission: 'To develop a full-stack platform that leverages NLP to understand user needs (budget, interests, time) and generates complete, day-by-day travel itineraries with real-world context from Google Maps.', tech: ['Python', 'Flask', 'JavaScript', 'Gemini API', 'Google Maps API', 'MongoDB', 'HTML/CSS', 'Bootstrap'], outcome: [ 'Reduced average planning time by 2-3 hours per trip.', 'Achieved over 80% positive feedback in user testing for its "smart" suggestions.', 'Improved AI output quality by 40% through iterative prompt engineering.', 'Reduced API latency by up to 60% using background processing and caching.' ], interactive: 'tripPlanner' },
-            { id: 'fetal-brain', tags: ['ai-ml'], title: 'Fetal Brain Anomaly Detection', category: 'Deep Learning & Medical Imaging', description: 'A CNN model to detect brain anomalies in 2D fetal ultrasound images, aiding early diagnosis.', challenge: 'The detection of fetal brain anomalies from ultrasounds is subjective and error-prone, especially in low-resource settings. The goal was to build a reliable AI decision support tool.', mission: 'To design, train, and evaluate a Convolutional Neural Network (CNN) that can accurately classify fetal brain ultrasounds as "Normal" or "Abnormal," and to make the model\'s decisions interpretable.', tech: ['Python', 'TensorFlow', 'Keras', 'OpenCV', 'Scikit-learn', 'Matplotlib'], outcome: [ 'Achieved ~91.3% test accuracy, outperforming baseline models by >15%.', 'Reached a 0.94 AUC score, indicating strong classification confidence.', 'Successfully used Grad-CAM heatmaps to visualize model focus, enhancing interpretability for medical use.', 'Overcame small dataset and class imbalance issues through data augmentation and class weighting.' ], interactive: 'fetalBrain' },
-            { id: 'fraud-detection', tags: ['ai-ml', 'data-eng'], title: 'Credit Card Fraud Detection', category: 'Machine Learning & FinTech', description: 'An ML system to identify fraudulent transactions in a highly imbalanced dataset.', challenge: 'Fraudulent transactions are extremely rare events (less than 0.2% of data), making them difficult to detect accurately without a high number of false positives.', mission: 'To build and optimize a machine learning model (XGBoost) that maximizes fraud detection (Recall) while keeping false alarms (low False Positive Rate) to a minimum for real-world banking systems.', tech: ['Python', 'Pandas', 'Scikit-learn', 'XGBoost', 'LightGBM', 'Matplotlib'], outcome: [ 'Best model (XGBoost) achieved 95.2% Recall and 89.4% Precision.', 'Maintained a low False Positive Rate of under 2.3%.', 'Used SHAP and permutation importance for model explainability, identifying key fraud indicators.', 'Gained deep experience in handling highly imbalanced datasets and selecting appropriate evaluation metrics.' ], interactive: 'fraudDetection' },
-            { id: 'ecommerce-platform', tags: ['full-stack', 'backend'], title: 'Scalable E-Commerce Platform', category: 'Full Stack & Cloud DevOps', description: 'A production-ready e-commerce system designed for high traffic, security, and performance.', challenge: 'Building an e-commerce platform that goes beyond basic functionality to handle high concurrency, secure payments, and maintain performance at scale.', mission: 'To architect and deploy a modular, containerized e-commerce application using a modern tech stack (React, Flask, Docker, AWS) with a focus on scalability, reliability, and best practices in DevOps.', tech: ['Python', 'Flask', 'React.js', 'PostgreSQL', 'Docker', 'Redis', 'AWS', 'Stripe API'], outcome: [ 'Improved page load time by 42% by implementing Redis caching.', 'Handled 500 concurrent users in load tests with stable performance.', 'Implemented a CI/CD pipeline with GitHub Actions, reducing deployment friction.', 'Gained hands-on experience with cloud-native deployments, containerization, and microservice principles.' ], interactive: 'ecommerce' },
-            { id: 'hindi-lip-reading', tags: ['ai-ml'], title: 'Hindi Lip-Reading & VSR Model', category: 'Deep Learning & NLP Research', description: 'A pioneering project to create a Hindi lip-reading dataset and a Visual Speech Recognition model.', challenge: 'Visual Speech Recognition (VSR) is a major challenge for low-resource languages like Hindi due to the lack of large-scale, curated datasets and the ambiguity of lip movements (homophemes).', mission: 'To create a high-quality, 250+ hour Hindi lip-reading dataset from scratch and develop an end-to-end deep learning model (3D CNN + ResNet + Conformer) to perform visual transcription.', tech: ['Python', 'PyTorch', 'FFmpeg', 'SyncNet', 'ResNet-18', 'Conformer'], outcome: [ 'Successfully created a 250+ hour, multi-speaker Hindi VSR dataset.', 'Developed a fully automated preprocessing pipeline for video, audio, and text data.', 'Achieved a 71.4% Word Error Rate (WER), a promising result for an early-stage model in a low-resource language.', 'Gained full-stack AI research experience, from data creation to model implementation.' ] },
-            { id: 'network-analyzer', tags: ['backend'], title: 'Network Traffic Analyzer', category: 'Networking & Cybersecurity', description: 'A Python-based tool to monitor, analyze, and visualize live network traffic for security and diagnostics.', challenge: 'Commercial network analysis tools can be complex and heavyweight. The goal was to create a lightweight, customizable, and easy-to-understand tool for real-time packet inspection.', mission: 'To build a system using Scapy and Pandas that could sniff live network packets, log them efficiently to SQLite, analyze them for anomalies (like port scans), and visualize traffic patterns.', tech: ['Python', 'Scapy', 'Pandas', 'Matplotlib', 'SQLite'], outcome: [ 'Successfully flagged simulated SYN floods and data exfiltration scenarios.', 'Achieved ~90% accuracy in identifying basic protocols against Wireshark benchmarks.', 'Gained deep knowledge of OSI layers, packet mechanics, and security threat signatures.', 'Designed an efficient schema for high-throughput packet logging and querying.' ] },
-            { id: 'affirmation-library', tags: ['full-stack', 'backend', 'data-eng'], title: 'Public Affirmation Library', category: 'Full-stack Web App & Database Systems', description: 'A community-driven platform for sharing positive affirmations to promote mental well-being.', challenge: 'Creating a safe, positive, and robust digital space for emotional support requires careful backend engineering, secure text handling, and an empathetic user interface.', mission: 'To engineer a platform with a complex PostgreSQL backend (including stored procedures and triggers) and a TypeScript frontend, allowing users to submit, browse, and favorite affirmations securely and anonymously.', tech: ['Python', 'TypeScript', 'PostgreSQL', 'Docker', 'HTML/CSS', 'JavaScript'], outcome: [ 'System supported 1000+ concurrent interactions with minimal latency in tests.', 'Query optimization and connection pooling led to a 35% improvement in load time.', 'Gained hands-on experience with advanced PostgreSQL features like PL/pgSQL.', 'Learned about designing for emotional impact and empathy in technology.'], interactive: 'affirmationLibrary' },
-            { id: 'env-simulator', tags: [], title: 'Environmental Impact Simulator', category: 'Java Desktop Application & Data Visualization', description: 'A Java Swing application to quantify and visualize the ecological impact of everyday human activities.', challenge: 'Many people are unaware of the tangible environmental footprint of their daily choices. The goal was to create a tool to raise awareness through data-driven insights.', mission: 'To develop a user-focused desktop application that allows detailed tracking of activities like travel and energy use, providing interactive visualizations and actionable recommendations for sustainable behavior.', tech: ['Java', 'Swing'], outcome: [ 'Serves as an effective educational tool to show unseen environmental costs.', 'Encourages greener choices through data-backed behavioral nudging.', 'Mastered Java Swing, object-oriented design, and data visualization principles.', 'Gained a deeper understanding of sustainability through simulation modeling.'], interactive: 'envSimulator' }
-        ];
+        const experiences = [ { date: 'Jun 2024 - Aug 2024', title: 'Software Development Intern', company: 'Dassault Systèmes', description: 'Engineered an offline NLP assistant to slash manual lookup times for engineers. Fine-tuned a BERT model for domain-specific search, achieving high accuracy and reliability within a constrained network.', tags: ['~90% Accuracy', '-40% Lookup Time', '+35% Test Coverage'], color: 'blue' }, { date: 'Dec 2021 - Aug 2023', title: 'Machine Learning Intern', company: 'Scanpoint Geomatics Ltd', description: 'Automated ingestion and processing pipelines for massive geospatial datasets (40-60 GB/week). Trained and tuned YOLOv8 & U-Net models for crop detection and segmentation, delivering actionable map layers to over 500 field surveyors.', tags: ['+22% F1 Score', '-30% Failed Runs', '500+ Users'], color: 'green' }, { date: 'Jul 2021 - Dec 2021', title: 'Software Development Engineer Intern', company: 'Cmarix Technolabs Pvt Ltd', description: 'Improved frontend performance and maintainability for client web apps. Refactored 5k+ lines of code, introduced lazy loading and code-splitting, and standardized UI components to reduce bugs and improve user experience.', tags: ['-18% Bundle Size', '+25% FCP', '-30% UI Issues'], color: 'purple' } ];
+        const projects = [ { id: 'trip-planner', tags: ['ai-ml', 'full-stack'], title: 'AI-Powered Trip Planner', category: 'Full-stack AI Application', description: 'A web app that uses AI to generate personalized travel itineraries based on user preferences.', challenge: 'Eliminate the tedious manual research involved in travel planning by creating an intelligent, conversational agent that builds custom trips on the fly.', mission: 'To develop a full-stack platform that leverages NLP to understand user needs (budget, interests, time) and generates complete, day-by-day travel itineraries with real-world context from Google Maps.', tech: ['Python', 'Flask', 'JavaScript', 'Gemini API', 'Google Maps API', 'MongoDB', 'HTML/CSS', 'Bootstrap'], outcome: [ 'Reduced average planning time by 2-3 hours per trip.', 'Achieved over 80% positive feedback in user testing for its "smart" suggestions.', 'Improved AI output quality by 40% through iterative prompt engineering.', 'Reduced API latency by up to 60% using background processing and caching.' ], interactive: 'tripPlanner' }, { id: 'fetal-brain', tags: ['ai-ml'], title: 'Fetal Brain Anomaly Detection', category: 'Deep Learning & Medical Imaging', description: 'A CNN model to detect brain anomalies in 2D fetal ultrasound images, aiding early diagnosis.', challenge: 'The detection of fetal brain anomalies from ultrasounds is subjective and error-prone, especially in low-resource settings. The goal was to build a reliable AI decision support tool.', mission: 'To design, train, and evaluate a Convolutional Neural Network (CNN) that can accurately classify fetal brain ultrasounds as "Normal" or "Abnormal," and to make the model\'s decisions interpretable.', tech: ['Python', 'TensorFlow', 'Keras', 'OpenCV', 'Scikit-learn', 'Matplotlib'], outcome: [ 'Achieved ~91.3% test accuracy, outperforming baseline models by >15%.', 'Reached a 0.94 AUC score, indicating strong classification confidence.', 'Successfully used Grad-CAM heatmaps to visualize model focus, enhancing interpretability for medical use.', 'Overcame small dataset and class imbalance issues through data augmentation and class weighting.' ], interactive: 'fetalBrain' }, { id: 'fraud-detection', tags: ['ai-ml', 'data-eng'], title: 'Credit Card Fraud Detection', category: 'Machine Learning & FinTech', description: 'An ML system to identify fraudulent transactions in a highly imbalanced dataset.', challenge: 'Fraudulent transactions are extremely rare events (less than 0.2% of data), making them difficult to detect accurately without a high number of false positives.', mission: 'To build and optimize a machine learning model (XGBoost) that maximizes fraud detection (Recall) while keeping false alarms (low False Positive Rate) to a minimum for real-world banking systems.', tech: ['Python', 'Pandas', 'Scikit-learn', 'XGBoost', 'LightGBM', 'Matplotlib'], outcome: [ 'Best model (XGBoost) achieved 95.2% Recall and 89.4% Precision.', 'Maintained a low False Positive Rate of under 2.3%.', 'Used SHAP and permutation importance for model explainability, identifying key fraud indicators.', 'Gained deep experience in handling highly imbalanced datasets and selecting appropriate evaluation metrics.' ], interactive: 'fraudDetection' }, { id: 'ecommerce-platform', tags: ['full-stack', 'backend'], title: 'Scalable E-Commerce Platform', category: 'Full Stack & Cloud DevOps', description: 'A production-ready e-commerce system designed for high traffic, security, and performance.', challenge: 'Building an e-commerce platform that goes beyond basic functionality to handle high concurrency, secure payments, and maintain performance at scale.', mission: 'To architect and deploy a modular, containerized e-commerce application using a modern tech stack (React, Flask, Docker, AWS) with a focus on scalability, reliability, and best practices in DevOps.', tech: ['Python', 'Flask', 'React.js', 'PostgreSQL', 'Docker', 'Redis', 'AWS', 'Stripe API'], outcome: [ 'Improved page load time by 42% by implementing Redis caching.', 'Handled 500 concurrent users in load tests with stable performance.', 'Implemented a CI/CD pipeline with GitHub Actions, reducing deployment friction.', 'Gained hands-on experience with cloud-native deployments, containerization, and microservice principles.' ], interactive: 'ecommerce' }, { id: 'hindi-lip-reading', tags: ['ai-ml'], title: 'Hindi Lip-Reading & VSR Model', category: 'Deep Learning & NLP Research', description: 'A pioneering project to create a Hindi lip-reading dataset and a Visual Speech Recognition model.', challenge: 'Visual Speech Recognition (VSR) is a major challenge for low-resource languages like Hindi due to the lack of large-scale, curated datasets and the ambiguity of lip movements (homophemes).', mission: 'To create a high-quality, 250+ hour Hindi lip-reading dataset from scratch and develop an end-to-end deep learning model (3D CNN + ResNet + Conformer) to perform visual transcription.', tech: ['Python', 'PyTorch', 'FFmpeg', 'SyncNet', 'ResNet-18', 'Conformer'], outcome: [ 'Successfully created a 250+ hour, multi-speaker Hindi VSR dataset.', 'Developed a fully automated preprocessing pipeline for video, audio, and text data.', 'Achieved a 71.4% Word Error Rate (WER), a promising result for an early-stage model in a low-resource language.', 'Gained full-stack AI research experience, from data creation to model implementation.' ] }, { id: 'network-analyzer', tags: ['backend'], title: 'Network Traffic Analyzer', category: 'Networking & Cybersecurity', description: 'A Python-based tool to monitor, analyze, and visualize live network traffic for security and diagnostics.', challenge: 'Commercial network analysis tools can be complex and heavyweight. The goal was to create a lightweight, customizable, and easy-to-understand tool for real-time packet inspection.', mission: 'To build a system using Scapy and Pandas that could sniff live network packets, log them efficiently to SQLite, analyze them for anomalies (like port scans), and visualize traffic patterns.', tech: ['Python', 'Scapy', 'Pandas', 'Matplotlib', 'SQLite'], outcome: [ 'Successfully flagged simulated SYN floods and data exfiltration scenarios.', 'Achieved ~90% accuracy in identifying basic protocols against Wireshark benchmarks.', 'Gained deep knowledge of OSI layers, packet mechanics, and security threat signatures.', 'Designed an efficient schema for high-throughput packet logging and querying.' ] }, { id: 'affirmation-library', tags: ['full-stack', 'backend', 'data-eng'], title: 'Public Affirmation Library', category: 'Full-stack Web App & Database Systems', description: 'A community-driven platform for sharing positive affirmations to promote mental well-being.', challenge: 'Creating a safe, positive, and robust digital space for emotional support requires careful backend engineering, secure text handling, and an empathetic user interface.', mission: 'To engineer a platform with a complex PostgreSQL backend (including stored procedures and triggers) and a TypeScript frontend, allowing users to submit, browse, and favorite affirmations securely and anonymously.', tech: ['Python', 'TypeScript', 'PostgreSQL', 'Docker', 'HTML/CSS', 'JavaScript'], outcome: [ 'System supported 1000+ concurrent interactions with minimal latency in tests.', 'Query optimization and connection pooling led to a 35% improvement in load time.', 'Gained hands-on experience with advanced PostgreSQL features like PL/pgSQL.', 'Learned about designing for emotional impact and empathy in technology.'], interactive: 'affirmationLibrary' }, { id: 'env-simulator', tags: [], title: 'Environmental Impact Simulator', category: 'Java Desktop Application & Data Visualization', description: 'A Java Swing application to quantify and visualize the ecological impact of everyday human activities.', challenge: 'Many people are unaware of the tangible environmental footprint of their daily choices. The goal was to create a tool to raise awareness through data-driven insights.', mission: 'To develop a user-focused desktop application that allows detailed tracking of activities like travel and energy use, providing interactive visualizations and actionable recommendations for sustainable behavior.', tech: ['Java', 'Swing'], outcome: [ 'Serves as an effective educational tool to show unseen environmental costs.', 'Encourages greener choices through data-backed behavioral nudging.', 'Mastered Java Swing, object-oriented design, and data visualization principles.', 'Gained a deeper understanding of sustainability through simulation modeling.'], interactive: 'envSimulator' } ];
         const techLogos = { 'Python': 'https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white', 'Flask': 'https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white', 'JavaScript': 'https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black', 'Gemini API': 'https://img.shields.io/badge/Gemini_API-4285F4?style=for-the-badge&logo=google-gemini&logoColor=white', 'Google Maps API': 'https://img.shields.io/badge/Google_Maps-4285F4?style=for-the-badge&logo=googlemaps&logoColor=white', 'MongoDB': 'https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white', 'HTML/CSS': 'https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white', 'Bootstrap': 'https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white', 'TensorFlow': 'https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white', 'Keras': 'https://img.shields.io/badge/Keras-D00000?style=for-the-badge&logo=keras&logoColor=white', 'OpenCV': 'https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white', 'Scikit-learn': 'https://img.shields.io/badge/scikit_learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white', 'Matplotlib': 'https://img.shields.io/badge/Matplotlib-11557c?style=for-the-badge&logo=matplotlib&logoColor=white', 'Pandas': 'https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white', 'XGBoost': 'https://img.shields.io/badge/XGBoost-006100?style=for-the-badge&logo=xgboost&logoColor=white', 'LightGBM': 'https://img.shields.io/badge/LightGBM-444444?style=for-the-badge&logo=lightgbm&logoColor=white', 'React.js': 'https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black', 'PostgreSQL': 'https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white', 'Docker': 'https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white', 'Redis': 'https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white', 'AWS': 'https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white', 'Stripe API': 'https://img.shields.io/badge/Stripe-626CD9?style=for-the-badge&logo=stripe&logoColor=white', 'PyTorch': 'https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white', 'FFmpeg': 'https://img.shields.io/badge/FFmpeg-007800?style=for-the-badge&logo=ffmpeg&logoColor=white', 'SyncNet': 'https://img.shields.io/badge/SyncNet-992244?style=for-the-badge&logoColor=white', 'ResNet-18': 'https://img.shields.io/badge/ResNet--18-8A2BE2?style=for-the-badge&logoColor=white', 'Conformer': 'https://img.shields.io/badge/Conformer-4682B4?style=for-the-badge&logoColor=white', 'Scapy': 'https://img.shields.io/badge/Scapy-E05A17?style=for-the-badge&logoColor=white', 'SQLite': 'https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white', 'Java': 'https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white', 'Swing': 'https://img.shields.io/badge/Swing-557c9b?style=for-the-badge&logoColor=white', 'TypeScript': 'https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white', };
 
         // --- Gemini API Integration (via Serverless Function) ---
@@ -325,59 +291,71 @@
             }).catch(err => { console.error('Failed to copy text: ', err); copyBtnText.textContent = 'Failed'; setTimeout(() => { copyBtnText.textContent = 'Copy'; }, 2000); });
         });
 
+        // --- UPDATED: 3D Background with Three.js ---
         const canvas = document.getElementById('particle-canvas');
-        const ctx = canvas.getContext('2d');
-        let particlesArray;
-        function setCanvasDimensions() {
-            const heroSection = document.getElementById('home');
-            canvas.width = heroSection.offsetWidth;
-            canvas.height = heroSection.offsetHeight;
-        }
-        class Particle {
-            constructor(x, y, dX, dY, s, c) { this.x = x; this.y = y; this.directionX = dX; this.directionY = dY; this.size = s; this.color = c; }
-            draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false); ctx.fillStyle = this.color; ctx.fill(); }
-            update() { if (this.x > canvas.width || this.x < 0) this.directionX = -this.directionX; if (this.y > canvas.height || this.y < 0) this.directionY = -this.directionY; this.x += this.directionX; this.y += this.directionY; this.draw(); }
-        }
-        function initParticles() {
-            particlesArray = [];
-            let num = (canvas.width * canvas.height) / 9000;
-            for (let i = 0; i < num; i++) {
-                let size = (Math.random() * 2.5) + 1;
-                let x = Math.random() * canvas.width;
-                let y = Math.random() * canvas.height;
-                let dX = (Math.random() * 0.4) - 0.2;
-                let dY = (Math.random() * 0.4) - 0.2;
-                particlesArray.push(new Particle(x, y, dX, dY, size, 'rgba(59, 130, 246, 0.3)'));
-            }
-        }
-        function connectParticles() {
-            for (let a = 0; a < particlesArray.length; a++) {
-                for (let b = a; b < particlesArray.length; b++) {
-                    let distance = ((particlesArray[a].x - particlesArray[b].x) ** 2) + ((particlesArray[a].y - particlesArray[b].y) ** 2);
-                    if (distance < (canvas.width/7) * (canvas.height/7)) {
-                        let opacity = 1 - (distance/20000);
-                        ctx.strokeStyle = `rgba(59, 130, 246, ${opacity * 0.2})`;
-                        ctx.lineWidth = 1;
-                        ctx.beginPath();
-                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
-                        ctx.stroke();
-                    }
-                }
-            }
-        }
-        function animateParticles() {
-            requestAnimationFrame(animateParticles);
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < particlesArray.length; i++) particlesArray[i].update();
-            connectParticles();
-        }
-        setCanvasDimensions();
-        initParticles();
-        animateParticles();
-        const heroResizeObserver = new ResizeObserver(() => { setCanvasDimensions(); initParticles(); });
-        heroResizeObserver.observe(document.getElementById('home'));
+        let scene, camera, renderer, particles, lines;
 
+        function init3DBackground() {
+            scene = new THREE.Scene();
+            
+            // UPDATED: Use window dimensions
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 30;
+
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+            // UPDATED: Use window dimensions
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            const particleCount = 500;
+            const positions = new Float32Array(particleCount * 3);
+            for (let i = 0; i < particleCount * 3; i++) {
+                positions[i] = (Math.random() - 0.5) * 100;
+            }
+            const particlesGeometry = new THREE.BufferGeometry();
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            const particlesMaterial = new THREE.PointsMaterial({ color: 0x3b82f6, size: 0.2, transparent: true, opacity: 0.7 });
+            particles = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particles);
+
+            const lineMaterial = new THREE.LineBasicMaterial({ color: 0x3b82f6, transparent: true, opacity: 0.1 });
+            const lineGeometry = new THREE.BufferGeometry();
+            lineGeometry.setAttribute('position', particlesGeometry.attributes.position);
+            lines = new THREE.LineSegments(lineGeometry, lineMaterial);
+            scene.add(lines);
+
+            window.addEventListener('resize', onWindowResize);
+            document.addEventListener('mousemove', onMouseMove);
+        }
+
+        function onWindowResize() {
+            // UPDATED: Use window dimensions
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+        
+        let mouseX = 0, mouseY = 0;
+        function onMouseMove(event) {
+            mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+        }
+
+        function animate3D() {
+            requestAnimationFrame(animate3D);
+            particles.rotation.x += 0.0001;
+            particles.rotation.y += 0.0002;
+            lines.rotation.copy(particles.rotation);
+            camera.position.x += (mouseX * 5 - camera.position.x) * 0.02;
+            camera.position.y += (-mouseY * 5 - camera.position.y) * 0.02;
+            camera.lookAt(scene.position);
+            renderer.render(scene, camera);
+        }
+
+        init3DBackground();
+        animate3D();
+        
+        // --- Other page scripts ---
         const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.1 });
         document.querySelectorAll('.scroll-animate').forEach(el => observer.observe(el));
 
@@ -407,20 +385,16 @@
             experienceContainer.appendChild(item);
         });
         
-        // --- UPDATED: Project Cards, Modal, and Filtering ---
         const projectsGrid = document.getElementById('projects-grid');
         const projectFilters = document.getElementById('project-filters');
         const modal = document.getElementById('project-modal');
         const modalContent = document.getElementById('modal-content');
 
-        // Function to render project cards
         function renderProjects(filter = 'all') {
-            projectsGrid.innerHTML = ''; // Clear existing projects
+            projectsGrid.innerHTML = '';
             const filteredProjects = filter === 'all' ? projects : projects.filter(p => p.tags.includes(filter));
-            
             filteredProjects.forEach(project => {
                 const card = document.createElement('div');
-                // Add a data attribute for the filter tags
                 card.className = 'project-card glass-effect p-6 rounded-lg shadow-lg flex flex-col justify-between hover:-translate-y-2 transition-transform cursor-pointer';
                 card.dataset.projectId = project.id;
                 card.innerHTML = `<div><h3 class="text-xl font-bold text-white">${project.title}</h3><p class="text-sm text-blue-400 mt-1">${project.category}</p><p class="mt-4 text-slate-300">${project.description}</p></div><button class="mt-6 text-left font-semibold text-white hover:text-blue-400 transition-colors">View Case Study &rarr;</button>`;
@@ -428,28 +402,19 @@
             });
         }
 
-        // Handle filter button clicks
         projectFilters.addEventListener('click', (e) => {
             if (e.target.tagName === 'BUTTON') {
-                // Update active button style
                 document.querySelector('.filter-btn.active').classList.remove('active');
                 e.target.classList.add('active');
-                
-                // Re-render projects with the selected filter
-                const filter = e.target.dataset.filter;
-                renderProjects(filter);
+                renderProjects(e.target.dataset.filter);
             }
         });
-
-        // Initial render of all projects
         renderProjects();
-
 
         projectsGrid.addEventListener('click', (e) => {
             const card = e.target.closest('[data-project-id]');
             if (card) {
-                const projectId = card.dataset.projectId;
-                const project = projects.find(p => p.id === projectId);
+                const project = projects.find(p => p.id === card.dataset.projectId);
                 openModal(project);
             }
         });
