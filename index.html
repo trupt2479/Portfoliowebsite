@@ -45,7 +45,6 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
-        /* UPDATED: Two-Sided Timeline Styles with Hover Effect */
         #timeline-container {
             position: relative;
             max-width: 56rem;
@@ -85,8 +84,8 @@
             left: calc(50% + 2rem);
         }
         .timeline-content {
-            position: relative; /* Needed for absolute positioning of children */
-            overflow: hidden; /* Hide overflowing content */
+            position: relative;
+            overflow: hidden;
         }
         .summary-view, .detail-view {
             transition: opacity 0.3s ease-in-out;
@@ -94,17 +93,17 @@
         .detail-view {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            padding: 1.5rem; /* Match parent padding */
+            padding: 1.5rem;
             opacity: 0;
-            pointer-events: none; /* Can't interact when hidden */
-            overflow-y: auto; /* Allow scrolling if content is still too long */
+            pointer-events: none;
+            overflow-y: auto;
         }
         .timeline-content:hover .summary-view {
             opacity: 0;
         }
         .timeline-content:hover .detail-view {
             opacity: 1;
-            pointer-events: auto; /* Can interact when visible */
+            pointer-events: auto;
         }
         .detail-view::-webkit-scrollbar { width: 6px; }
         .detail-view::-webkit-scrollbar-track { background: transparent; }
@@ -286,7 +285,7 @@
         const timelineItems = [
             { type: 'education', startYear: 2023, endYear: 2025, date: 'Sep 2023 - May 2025', title: 'Master of Science, Computer Engineering', company: 'New York University (NYU)', description: 'Relevant Coursework: Machine Learning, Internet Architecture Protocol, Data Structure and Algorithm, Real-time Embedded Systems, Computer Systems Architecture, Intro to Java, VLSI System Design, Advanced Topics of Computer Vision, Big Data, Database Management Systems.', tags: ['Tandon School of Engineering'], color: 'purple' },
             { type: 'experience', startYear: 2024, endYear: 2024, date: 'Jun 2024 - Aug 2024', title: 'Software Development Intern', company: 'Dassault Systèmes', description: 'Engineered an offline NLP assistant to slash manual lookup times for engineers. Fine-tuned a BERT model for domain-specific search, achieving high accuracy and reliability within a constrained network.', tags: ['~90% Accuracy', '-40% Lookup Time', '+35% Test Coverage'], color: 'blue' },
-            { type: 'experience', startYear: 2021, endYear: 2023, date: 'Dec 2021 - Aug 2023', title: 'Machine Learning Intern', company: 'Scanpoint Geomatics Ltd', description: 'Automated ingestion and processing pipelines for massive geospatial datasets (40-60 GB/week). Trained and tuned YOLOv8 & U-Net models for crop detection and segmentation, delivering actionable map layers to over 500 field surveyors.', tags: ['+22% F1 Score', '-30% Failed Runs', '500+ Users'], color: 'green' },
+            { type: 'experience', startYear: 2022, endYear: 2023, date: 'Dec 2021 - Aug 2023', title: 'Machine Learning Intern', company: 'Scanpoint Geomatics Ltd', description: 'Automated ingestion and processing pipelines for massive geospatial datasets (40-60 GB/week). Trained and tuned YOLOv8 & U-Net models for crop detection and segmentation, delivering actionable map layers to over 500 field surveyors.', tags: ['+22% F1 Score', '-30% Failed Runs', '500+ Users'], color: 'green' },
             { type: 'experience', startYear: 2021, endYear: 2021, date: 'Jul 2021 - Dec 2021', title: 'Software Development Engineer Intern', company: 'Cmarix Technolabs Pvt Ltd', description: 'Improved frontend performance and maintainability for client web apps. Refactored 5k+ lines of code, introduced lazy loading and code-splitting, and standardized UI components to reduce bugs and improve user experience.', tags: ['-18% Bundle Size', '+25% FCP', '-30% UI Issues'], color: 'purple' },
             { type: 'education', startYear: 2019, endYear: 2023, date: '2019 - 2023', title: 'Bachelor of Technology, Information Technology', company: 'SRM Institute of Science & Technology (SRMIST)', description: 'Relevant Coursework: Object Oriented Design and Programming, Operating Systems, Software Engineering, AI. <br><br><strong>On-Campus Activity:</strong> As an <strong>Instructor for AI in Robotics</strong>, I led sessions for 200+ students on microcontroller programming (ESP32), sensors, and computer vision with Python/OpenCV, mentoring teams through hands-on builds.', tags: ['IT Department', 'Teaching', 'Mentorship'], color: 'purple' }
         ];
@@ -513,7 +512,6 @@
             modal.classList.add('flex');
             document.body.style.overflow = 'hidden';
             
-            // UPDATED: Corrected the prompt for the "Explain this project" button
             document.getElementById('explain-project-btn').addEventListener('click', async function() {
                 const explanationDiv = document.getElementById('project-explanation');
                 showLoader(explanationDiv);
@@ -528,10 +526,53 @@
             else { interactiveContainer.innerHTML = `<p class="text-center text-slate-400">Details for this project are available upon request.</p>`; }
         }
 
+        // UPDATED: Restored the full loadInteractiveElement function
         async function loadInteractiveElement(container, type) {
             container.innerHTML = '';
             switch (type) {
-                // ... cases for interactive elements
+                case 'tripPlanner':
+                    container.innerHTML = `
+                        <h5 class="font-bold text-white text-center mb-4">Live Demo: AI Trip Planner</h5>
+                        <div class="space-y-4 max-w-md mx-auto">
+                             <div>
+                                <label for="trip-city" class="text-sm text-slate-300">Destination</label>
+                                <input id="trip-city" type="text" class="w-full mt-1 px-3 py-2 rounded-md bg-slate-800 border border-slate-600 focus:outline-none focus:ring-1 focus:ring-blue-500" value="Paris">
+                            </div>
+                            <button id="suggest-activities-btn" class="w-full bg-teal-600/80 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-md transition-colors flex items-center justify-center gap-2">✨ Suggest Activities with Gemini</button>
+                        </div>
+                        <div id="trip-output" class="mt-4 p-4 bg-slate-800 rounded-md text-slate-300 hidden"></div>
+                    `;
+                    document.getElementById('suggest-activities-btn').addEventListener('click', async () => {
+                        const city = document.getElementById('trip-city').value || 'Paris';
+                        const outputDiv = document.getElementById('trip-output');
+                        showLoader(outputDiv);
+                        const prompt = `You are a creative travel assistant. Suggest 3 unique and interesting activities for a tourist visiting ${city}. Provide a short, one-sentence description for each. Format the output as a simple list.`;
+                        const suggestions = await callGemini(prompt);
+                        outputDiv.innerHTML = suggestions.replace(/\n/g, '<br>');
+                    });
+                    break;
+                case 'fetalBrain':
+                    container.innerHTML = `<h5 class="font-bold text-white text-center mb-4">Interactive Demo: Explainable AI (XAI)</h5> <p class="text-center text-sm text-slate-400 mb-4">Drag the slider to reveal where the AI model is "looking" using a Grad-CAM heatmap.</p> <div class="relative max-w-sm mx-auto aspect-square"> <img src="https://placehold.co/400x400/000000/FFFFFF?text=Fetal+Ultrasound" class="absolute inset-0 w-full h-full object-cover rounded-md" alt="Fetal Ultrasound"> <div id="heatmap-overlay" class="absolute inset-0 w-1/2 h-full overflow-hidden"> <img src="https://placehold.co/800x400/FF0000/FFFFFF?text=Heatmap" style="width: 200%; height: 100%; max-width: 200%;" class="object-cover rounded-md" alt="Grad-CAM Heatmap"> </div> <input type="range" min="0" max="100" value="50" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" oninput="document.getElementById('heatmap-overlay').style.width = this.value + '%'"> </div>`;
+                    break;
+                case 'fraudDetection':
+                    container.innerHTML = `<h5 class="font-bold text-white text-center mb-4">Interactive Demo: Precision vs. Recall</h5> <p class="text-center text-sm text-slate-400 mb-4">Adjust the model's detection threshold to see its effect on performance metrics.</p> <div class="max-w-lg mx-auto"> <canvas id="fraudChart"></canvas> <div class="mt-4"> <label for="threshold-slider" class="text-sm text-slate-300">Detection Threshold: <span id="threshold-value" class="font-bold text-white">0.5</span></label> <input id="threshold-slider" type="range" min="0.1" max="0.9" value="0.5" step="0.01" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer"> </div> </div>`;
+                    const ctx = document.getElementById('fraudChart').getContext('2d');
+                    const fraudChart = new Chart(ctx, { type: 'bar', data: { labels: ['Precision (Correct Alerts)', 'Recall (Frauds Caught)'], datasets: [{ label: 'Model Performance', data: [89.4, 95.2], backgroundColor: ['rgba(59, 130, 246, 0.5)', 'rgba(22, 163, 74, 0.5)'], borderColor: ['rgba(59, 130, 246, 1)', 'rgba(22, 163, 74, 1)'], borderWidth: 1 }] }, options: { scales: { y: { beginAtZero: true, max: 100, ticks: { color: '#94a3b8' } }, x: { ticks: { color: '#94a3b8' } } }, plugins: { legend: { display: false } } } });
+                    document.getElementById('threshold-slider').addEventListener('input', (e) => { const threshold = parseFloat(e.target.value); document.getElementById('threshold-value').textContent = threshold.toFixed(2); const precision = 20 + (threshold * 90); const recall = 110 - (threshold * 80); fraudChart.data.datasets[0].data = [precision, recall]; fraudChart.update(); });
+                    break;
+                case 'ecommerce':
+                     container.innerHTML = `<h5 class="font-bold text-white text-center mb-4">Architecture: Scalable Cloud Deployment</h5> <p class="text-center text-sm text-slate-400 mb-4">This diagram illustrates the cloud-native architecture designed for performance and reliability.</p> <div class="bg-slate-800 p-4 rounded-md border border-slate-700 text-center font-mono text-sm"> <p class="text-green-400">[User via Browser]</p> <p class="text-slate-400">|</p> <p class="text-slate-400">V</p> <div class="p-2 border border-dashed border-slate-600 rounded-md"> <p class="text-yellow-400">[AWS Cloud]</p> <p class="text-slate-400">| --> [Nginx Reverse Proxy on EC2]</p> <p class="text-slate-400">|           |</p> <p class="text-slate-400">+-- [React Frontend (Docker)] &lt;--&gt; [Flask Backend API (Docker)] --+-- [Stripe API]</p> <p class="text-slate-400">                                       |                    |</p> <p class="text-slate-400">                                       +-- [Redis (Cache)]    +-- [PostgreSQL (DB)]</p> </div> <p class="text-slate-400 mt-2">Static Assets (Images) served from [AWS S3]</p> </div>`;
+                     break;
+                case 'affirmationLibrary':
+                    container.innerHTML = `<h5 class="font-bold text-white text-center mb-4">Live Demo: Public Affirmation Library</h5> <div class="max-w-lg mx-auto"> <div id="affirmations-list" class="space-y-2 mb-4 h-24 overflow-y-auto p-2 bg-slate-800 rounded-md"> <p class="text-slate-300 p-2 rounded-md bg-slate-700/50">You are capable of amazing things.</p> </div> <div class="flex gap-2"> <input id="affirmation-input" type="text" class="flex-grow px-3 py-2 rounded-md bg-slate-800 border border-slate-600 focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Share a positive message..."> <button id="submit-affirmation" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition-colors">Share</button> </div> </div>`;
+                    document.getElementById('submit-affirmation').addEventListener('click', () => { const input = document.getElementById('affirmation-input'); const list = document.getElementById('affirmations-list'); if (input.value.trim()) { const newAffirmation = document.createElement('p'); newAffirmation.className = 'text-slate-300 p-2 rounded-md bg-slate-700/50 animate-pulse'; newAffirmation.textContent = input.value; list.appendChild(newAffirmation); list.scrollTop = list.scrollHeight; input.value = ''; setTimeout(() => newAffirmation.classList.remove('animate-pulse'), 500); } });
+                    break;
+                case 'envSimulator':
+                    container.innerHTML = `<h5 class="font-bold text-white text-center mb-4">Interactive Demo: Environmental Impact</h5> <p class="text-center text-sm text-slate-400 mb-4">Add activities to see their cumulative impact on the environment.</p> <div class="max-w-lg mx-auto"> <canvas id="envChart"></canvas> <div class="mt-4 flex flex-wrap gap-2 justify-center"> <button data-activity="car" class="bg-red-600/50 hover:bg-red-600 text-white text-sm font-bold py-1 px-3 rounded-md transition-colors">Add Car Trip</button> <button data-activity="energy" class="bg-yellow-600/50 hover:bg-yellow-600 text-white text-sm font-bold py-1 px-3 rounded-md transition-colors">Add Energy Use</button> <button data-activity="water" class="bg-cyan-600/50 hover:bg-cyan-600 text-white text-sm font-bold py-1 px-3 rounded-md transition-colors">Add Water Use</button> </div> </div>`;
+                    const envCtx = document.getElementById('envChart').getContext('2d');
+                    const envChart = new Chart(envCtx, { type: 'bar', data: { labels: ['Carbon (kg)', 'Energy (kWh)', 'Water (L)'], datasets: [{ label: 'Total Impact', data: [0, 0, 0], backgroundColor: ['rgba(220, 38, 38, 0.5)', 'rgba(234, 179, 8, 0.5)', 'rgba(6, 182, 212, 0.5)'], borderColor: ['rgba(220, 38, 38, 1)', 'rgba(234, 179, 8, 1)', 'rgba(6, 182, 212, 1)'], borderWidth: 1 }] }, options: { indexAxis: 'y', scales: { x: { beginAtZero: true, ticks: { color: '#94a3b8' } }, y: { ticks: { color: '#94a3b8' } } }, plugins: { legend: { display: false } } } });
+                    container.querySelector('.justify-center').addEventListener('click', (e) => { if(e.target.dataset.activity) { const activity = e.target.dataset.activity; if (activity === 'car') envChart.data.datasets[0].data[0] += 20; if (activity === 'energy') envChart.data.datasets[0].data[1] += 50; if (activity === 'water') envChart.data.datasets[0].data[2] += 100; envChart.update(); } });
+                    break;
             }
         }
     });
