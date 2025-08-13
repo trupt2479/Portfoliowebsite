@@ -169,14 +169,24 @@
         <section id="contact" class="container mx-auto px-6 py-20 text-center scroll-animate">
             <h2 class="text-3xl font-bold text-white">Let's Build Something Intelligent</h2>
             <p class="mt-4 text-slate-400 max-w-xl mx-auto">I'm always open to discussing new projects, creative ideas, or opportunities to be part of an ambitious team. Feel free to reach out.</p>
-            <div class="mt-8 flex justify-center space-x-6">
-                <a href="mailto:trupt.acharya@nyu.edu" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-transform transform hover:scale-105">Email Me</a>
-                <a href="https://github.com/trupt2479" target="_blank" class="text-slate-400 hover:text-white transition-colors">
-                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.168 6.839 9.49.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.378.203 2.398.1 2.651.64.7 1.03 1.595 1.03 2.688 0 3.848-2.338 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd" /></svg>
-                </a>
-                <a href="https://www.linkedin.com/in/trupt-acharya/" target="_blank" class="text-slate-400 hover:text-white transition-colors">
-                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-                </a>
+            <div class="mt-8 flex flex-col items-center space-y-4">
+                <!-- This is the new contact block -->
+                <div class="flex items-center space-x-4 p-3 rounded-lg bg-slate-800 border border-slate-700">
+                    <span id="email-text" class="text-lg text-slate-300">ta2674@nyu.edu</span>
+                    <button id="copy-email-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition-colors flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        <span id="copy-btn-text">Copy</span>
+                    </button>
+                </div>
+                <!-- Social links remain the same -->
+                <div class="flex justify-center space-x-6 pt-4">
+                    <a href="https://github.com/trupt2479" target="_blank" class="text-slate-400 hover:text-white transition-colors">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.168 6.839 9.49.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.378.203 2.398.1 2.651.64.7 1.03 1.595 1.03 2.688 0 3.848-2.338 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd" /></svg>
+                    </a>
+                    <a href="https://www.linkedin.com/in/trupt-acharya/" target="_blank" class="text-slate-400 hover:text-white transition-colors">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                    </a>
+                </div>
             </div>
         </section>
     </main>
@@ -269,6 +279,35 @@
             element.innerHTML = '<div class="flex justify-center items-center"><div class="loader"></div></div>';
             element.classList.remove('hidden');
         }
+        
+        // --- NEW: Copy Email to Clipboard ---
+        const copyEmailBtn = document.getElementById('copy-email-btn');
+        const emailText = document.getElementById('email-text');
+        const copyBtnText = document.getElementById('copy-btn-text');
+
+        copyEmailBtn.addEventListener('click', () => {
+            // Use the Clipboard API to copy the text
+            navigator.clipboard.writeText(emailText.textContent).then(() => {
+                // Provide visual feedback to the user
+                copyBtnText.textContent = 'Copied!';
+                copyEmailBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                copyEmailBtn.classList.add('bg-green-600');
+
+                // Reset the button text after a few seconds
+                setTimeout(() => {
+                    copyBtnText.textContent = 'Copy';
+                    copyEmailBtn.classList.remove('bg-green-600');
+                    copyEmailBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+                copyBtnText.textContent = 'Failed';
+                 setTimeout(() => {
+                    copyBtnText.textContent = 'Copy';
+                }, 2000);
+            });
+        });
+
 
         // --- Interactive Particle BG ---
         const canvas = document.getElementById('particle-canvas');
