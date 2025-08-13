@@ -85,33 +85,26 @@
             left: calc(50% + 2rem);
         }
         .timeline-content {
-            position: relative;
-            overflow: hidden;
+            position: relative; /* Needed for absolute positioning of children */
+            overflow: hidden; /* Hide overflowing content */
         }
         .summary-view, .detail-view {
             transition: opacity 0.3s ease-in-out;
         }
-        .summary-view img {
-            filter: grayscale(100%) brightness(1.5); /* Make logos blend in */
-            transition: transform 0.3s ease;
-        }
-        .timeline-content:hover .summary-view img {
-            transform: scale(1.1);
-        }
         .detail-view {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            padding: 1.5rem;
+            padding: 1.5rem; /* Match parent padding */
             opacity: 0;
-            pointer-events: none;
-            overflow-y: auto;
+            pointer-events: none; /* Can't interact when hidden */
+            overflow-y: auto; /* Allow scrolling if content is still too long */
         }
         .timeline-content:hover .summary-view {
             opacity: 0;
         }
         .timeline-content:hover .detail-view {
             opacity: 1;
-            pointer-events: auto;
+            pointer-events: auto; /* Can interact when visible */
         }
         .detail-view::-webkit-scrollbar { width: 6px; }
         .detail-view::-webkit-scrollbar-track { background: transparent; }
@@ -290,13 +283,12 @@
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         // --- Data ---
-        // UPDATED: Added logo property to each item
         const timelineItems = [
-            { type: 'education', startYear: 2023, endYear: 2025, date: 'Sep 2023 - May 2025', title: 'Master of Science, Computer Engineering', company: 'New York University (NYU)', description: 'Relevant Coursework: Machine Learning, Internet Architecture Protocol, Data Structure and Algorithm, Real-time Embedded Systems, Computer Systems Architecture, Intro to Java, VLSI System Design, Advanced Topics of Computer Vision, Big Data, Database Management Systems.', tags: ['Tandon School of Engineering'], color: 'purple', logo: 'assets/nyulogo.jpg' },
-            { type: 'experience', startYear: 2024, endYear: 2024, date: 'Jun 2024 - Aug 2024', title: 'Software Development Intern', company: 'Dassault Systèmes', description: 'Engineered an offline NLP assistant to slash manual lookup times for engineers. Fine-tuned a BERT model for domain-specific search, achieving high accuracy and reliability within a constrained network.', tags: ['~90% Accuracy', '-40% Lookup Time', '+35% Test Coverage'], color: 'blue', logo: 'assets/dassaultsystemeslogo.jpg' },
-            { type: 'experience', startYear: 2022, endYear: 2023, date: 'Dec 2021 - Aug 2023', title: 'Machine Learning Intern', company: 'Scanpoint Geomatics Ltd', description: 'Automated ingestion and processing pipelines for massive geospatial datasets (40-60 GB/week). Trained and tuned YOLOv8 & U-Net models for crop detection and segmentation, delivering actionable map layers to over 500 field surveyors.', tags: ['+22% F1 Score', '-30% Failed Runs', '500+ Users'], color: 'green', logo: 'assets/scanpointlogo.jpg' },
-            { type: 'experience', startYear: 2021, endYear: 2021, date: 'Jul 2021 - Dec 2021', title: 'Software Development Engineer Intern', company: 'Cmarix Technolabs Pvt Ltd', description: 'Improved frontend performance and maintainability for client web apps. Refactored 5k+ lines of code, introduced lazy loading and code-splitting, and standardized UI components to reduce bugs and improve user experience.', tags: ['-18% Bundle Size', '+25% FCP', '-30% UI Issues'], color: 'purple', logo: 'assets/cmarixlogo.jpg' },
-            { type: 'education', startYear: 2019, endYear: 2023, date: '2019 - 2023', title: 'Bachelor of Technology, Information Technology', company: 'SRM Institute of Science & Technology (SRMIST)', description: 'Relevant Coursework: Object Oriented Design and Programming, Operating Systems, Software Engineering, AI. <br><br><strong>On-Campus Activity:</strong> As an <strong>Instructor for AI in Robotics</strong>, I led sessions for 200+ students on microcontroller programming (ESP32), sensors, and computer vision with Python/OpenCV, mentoring teams through hands-on builds.', tags: ['IT Department', 'Teaching', 'Mentorship'], color: 'purple', logo: 'assets/srmlogo.jpg' }
+            { type: 'education', startYear: 2023, endYear: 2025, date: 'Sep 2023 - May 2025', title: 'Master of Science, Computer Engineering', company: 'New York University (NYU)', description: 'Relevant Coursework: Machine Learning, Internet Architecture Protocol, Data Structure and Algorithm, Real-time Embedded Systems, Computer Systems Architecture, Intro to Java, VLSI System Design, Advanced Topics of Computer Vision, Big Data, Database Management Systems.', tags: ['Tandon School of Engineering'], color: 'purple' },
+            { type: 'experience', startYear: 2024, endYear: 2024, date: 'Jun 2024 - Aug 2024', title: 'Software Development Intern', company: 'Dassault Systèmes', description: 'Engineered an offline NLP assistant to slash manual lookup times for engineers. Fine-tuned a BERT model for domain-specific search, achieving high accuracy and reliability within a constrained network.', tags: ['~90% Accuracy', '-40% Lookup Time', '+35% Test Coverage'], color: 'blue' },
+            { type: 'experience', startYear: 2022, endYear: 2023, date: 'Dec 2021 - Aug 2023', title: 'Machine Learning Intern', company: 'Scanpoint Geomatics Ltd', description: 'Automated ingestion and processing pipelines for massive geospatial datasets (40-60 GB/week). Trained and tuned YOLOv8 & U-Net models for crop detection and segmentation, delivering actionable map layers to over 500 field surveyors.', tags: ['+22% F1 Score', '-30% Failed Runs', '500+ Users'], color: 'green' },
+            { type: 'experience', startYear: 2021, endYear: 2021, date: 'Jul 2021 - Dec 2021', title: 'Software Development Engineer Intern', company: 'Cmarix Technolabs Pvt Ltd', description: 'Improved frontend performance and maintainability for client web apps. Refactored 5k+ lines of code, introduced lazy loading and code-splitting, and standardized UI components to reduce bugs and improve user experience.', tags: ['-18% Bundle Size', '+25% FCP', '-30% UI Issues'], color: 'purple' },
+            { type: 'education', startYear: 2019, endYear: 2023, date: '2019 - 2023', title: 'Bachelor of Technology, Information Technology', company: 'SRM Institute of Science & Technology (SRMIST)', description: 'Relevant Coursework: Object Oriented Design and Programming, Operating Systems, Software Engineering, AI. <br><br><strong>On-Campus Activity:</strong> As an <strong>Instructor for AI in Robotics</strong>, I led sessions for 200+ students on microcontroller programming (ESP32), sensors, and computer vision with Python/OpenCV, mentoring teams through hands-on builds.', tags: ['IT Department', 'Teaching', 'Mentorship'], color: 'purple' }
         ];
         
         const projects = [ { id: 'trip-planner', tags: ['ai-ml', 'full-stack'], title: 'AI-Powered Trip Planner', category: 'Full-stack AI Application', description: 'A web app that uses AI to generate personalized travel itineraries based on user preferences.', challenge: 'Eliminate the tedious manual research involved in travel planning by creating an intelligent, conversational agent that builds custom trips on the fly.', mission: 'To develop a full-stack platform that leverages NLP to understand user needs (budget, interests, time) and generates complete, day-by-day travel itineraries with real-world context from Google Maps.', tech: ['Python', 'Flask', 'JavaScript', 'Gemini API', 'Google Maps API', 'MongoDB', 'HTML/CSS', 'Bootstrap'], outcome: [ 'Reduced average planning time by 2-3 hours per trip.', 'Achieved over 80% positive feedback in user testing for its "smart" suggestions.', 'Improved AI output quality by 40% through iterative prompt engineering.', 'Reduced API latency by up to 60% using background processing and caching.' ], interactive: 'tripPlanner' }, { id: 'fetal-brain', tags: ['ai-ml'], title: 'Fetal Brain Anomaly Detection', category: 'Deep Learning & Medical Imaging', description: 'A CNN model to detect brain anomalies in 2D fetal ultrasound images, aiding early diagnosis.', challenge: 'The detection of fetal brain anomalies from ultrasounds is subjective and error-prone, especially in low-resource settings. The goal was to build a reliable AI decision support tool.', mission: 'To design, train, and evaluate a Convolutional Neural Network (CNN) that can accurately classify fetal brain ultrasounds as "Normal" or "Abnormal," and to make the model\'s decisions interpretable.', tech: ['Python', 'TensorFlow', 'Keras', 'OpenCV', 'Scikit-learn', 'Matplotlib'], outcome: [ 'Achieved ~91.3% test accuracy, outperforming baseline models by >15%.', 'Reached a 0.94 AUC score, indicating strong classification confidence.', 'Successfully used Grad-CAM heatmaps to visualize model focus, enhancing interpretability for medical use.', 'Overcame small dataset and class imbalance issues through data augmentation and class weighting.' ], interactive: 'fetalBrain' }, { id: 'fraud-detection', tags: ['ai-ml', 'data-eng'], title: 'Credit Card Fraud Detection', category: 'Machine Learning & FinTech', description: 'An ML system to identify fraudulent transactions in a highly imbalanced dataset.', challenge: 'Fraudulent transactions are extremely rare events (less than 0.2% of data), making them difficult to detect accurately without a high number of false positives.', mission: 'To build and optimize a machine learning model (XGBoost) that maximizes fraud detection (Recall) while keeping false alarms (low False Positive Rate) to a minimum for real-world banking systems.', tech: ['Python', 'Pandas', 'Scikit-learn', 'XGBoost', 'LightGBM', 'Matplotlib'], outcome: [ 'Best model (XGBoost) achieved 95.2% Recall and 89.4% Precision.', 'Maintained a low False Positive Rate of under 2.3%.', 'Used SHAP and permutation importance for model explainability, identifying key fraud indicators.', 'Gained deep experience in handling highly imbalanced datasets and selecting appropriate evaluation metrics.' ], interactive: 'fraudDetection' }, { id: 'ecommerce-platform', tags: ['full-stack', 'backend'], title: 'Scalable E-Commerce Platform', category: 'Full Stack & Cloud DevOps', description: 'A production-ready e-commerce system designed for high traffic, security, and performance.', challenge: 'Building an e-commerce platform that goes beyond basic functionality to handle high concurrency, secure payments, and maintain performance at scale.', mission: 'To architect and deploy a modular, containerized e-commerce application using a modern tech stack (React, Flask, Docker, AWS) with a focus on scalability, reliability, and best practices in DevOps.', tech: ['Python', 'Flask', 'React.js', 'PostgreSQL', 'Docker', 'Redis', 'AWS', 'Stripe API'], outcome: [ 'Improved page load time by 42% by implementing Redis caching.', 'Handled 500 concurrent users in load tests with stable performance.', 'Implemented a CI/CD pipeline with GitHub Actions, reducing deployment friction.', 'Gained hands-on experience with cloud-native deployments, containerization, and microservice principles.' ], interactive: 'ecommerce' }, { id: 'hindi-lip-reading', tags: ['ai-ml'], title: 'Hindi Lip-Reading & VSR Model', category: 'Deep Learning & NLP Research', description: 'A pioneering project to create a Hindi lip-reading dataset and a Visual Speech Recognition model.', challenge: 'Visual Speech Recognition (VSR) is a major challenge for low-resource languages like Hindi due to the lack of large-scale, curated datasets and the ambiguity of lip movements (homophemes).', mission: 'To create a high-quality, 250+ hour Hindi lip-reading dataset from scratch and develop an end-to-end deep learning model (3D CNN + ResNet + Conformer) to perform visual transcription.', tech: ['Python', 'PyTorch', 'FFmpeg', 'SyncNet', 'ResNet-18', 'Conformer'], outcome: [ 'Successfully created a 250+ hour, multi-speaker Hindi VSR dataset.', 'Developed a fully automated preprocessing pipeline for video, audio, and text data.', 'Achieved a 71.4% Word Error Rate (WER), a promising result for an early-stage model in a low-resource language.', 'Gained full-stack AI research experience, from data creation to model implementation.' ] }, { id: 'network-analyzer', tags: ['backend'], title: 'Network Traffic Analyzer', category: 'Networking & Cybersecurity', description: 'A Python-based tool to monitor, analyze, and visualize live network traffic for security and diagnostics.', challenge: 'Commercial network analysis tools can be complex and heavyweight. The goal was to create a lightweight, customizable, and easy-to-understand tool for real-time packet inspection.', mission: 'To build a system using Scapy and Pandas that could sniff live network packets, log them efficiently to SQLite, analyze them for anomalies (like port scans), and visualize traffic patterns.', tech: ['Python', 'Scapy', 'Pandas', 'Matplotlib', 'SQLite'], outcome: [ 'Successfully flagged simulated SYN floods and data exfiltration scenarios.', 'Achieved ~90% accuracy in identifying basic protocols against Wireshark benchmarks.', 'Gained deep knowledge of OSI layers, packet mechanics, and security threat signatures.', 'Designed an efficient schema for high-throughput packet logging and querying.' ] }, { id: 'affirmation-library', tags: ['full-stack', 'backend', 'data-eng'], title: 'Public Affirmation Library', category: 'Full-stack Web App & Database Systems', description: 'A community-driven platform for sharing positive affirmations to promote mental well-being.', challenge: 'Creating a safe, positive, and robust digital space for emotional support requires careful backend engineering, secure text handling, and an empathetic user interface.', mission: 'To engineer a platform with a complex PostgreSQL backend (including stored procedures and triggers) and a TypeScript frontend, allowing users to submit, browse, and favorite affirmations securely and anonymously.', tech: ['Python', 'TypeScript', 'PostgreSQL', 'Docker', 'HTML/CSS', 'JavaScript'], outcome: [ 'System supported 1000+ concurrent interactions with minimal latency in tests.', 'Query optimization and connection pooling led to a 35% improvement in load time.', 'Gained hands-on experience with advanced PostgreSQL features like PL/pgSQL.', 'Learned about designing for emotional impact and empathy in technology.'], interactive: 'affirmationLibrary' }, { id: 'env-simulator', tags: [], title: 'Environmental Impact Simulator', category: 'Java Desktop Application & Data Visualization', description: 'A Java Swing application to quantify and visualize the ecological impact of everyday human activities.', challenge: 'Many people are unaware of the tangible environmental footprint of their daily choices. The goal was to create a tool to raise awareness through data-driven insights.', mission: 'To develop a user-focused desktop application that allows detailed tracking of activities like travel and energy use, providing interactive visualizations and actionable recommendations for sustainable behavior.', tech: ['Java', 'Swing'], outcome: [ 'Serves as an effective educational tool to show unseen environmental costs.', 'Encourages greener choices through data-backed behavioral nudging.', 'Mastered Java Swing, object-oriented design, and data visualization principles.', 'Gained a deeper understanding of sustainability through simulation modeling.'], interactive: 'envSimulator' } ];
@@ -304,9 +296,11 @@
 
         // --- Gemini API Integration (via Serverless Function) ---
         async function callGemini(prompt, retries = 3, delay = 1000) {
+            // UPDATED: Add a check for local development
             if (!window.location.hostname.includes('netlify.app') && !window.location.hostname.includes('truptacharya.com')) {
                 return "Portfolio Co-Pilot is only available on the live website.";
             }
+
             const apiUrl = `/.netlify/functions/call-gemini`;
             const payload = { prompt: prompt };
             try {
@@ -407,6 +401,7 @@
         const copilotInput = document.getElementById('copilot-input');
         const copilotResponse = document.getElementById('copilot-response');
         
+        // UPDATED: portfolioContext now dynamically builds from the timelineItems array
         const portfolioContext = `
             About Me: I'm an engineer passionate about building intelligent systems, with a focus on Machine Learning, AI, and Full Stack Development. My journey has taken me from architecting scalable backend platforms to fine-tuning complex NLP models. I am actively seeking opportunities as a Software Engineer, ML/AI Engineer, or Data Engineer where I can apply my skills to transform complex data into actionable insights and create meaningful, real-world solutions.
             Education & Experience:
@@ -429,8 +424,8 @@
         const timelineContainer = document.getElementById('timeline-container');
         const startYear = 2019;
         const endYear = 2025;
-        const yearHeight = 250;
-        const topPadding = 50;
+        const yearHeight = 250; // pixels per year
+        const topPadding = 50; // pixels
 
         timelineContainer.style.height = `${(endYear - startYear + 1) * yearHeight}px`;
 
@@ -454,18 +449,18 @@
             entry.style.top = `${topPos}px`;
             entry.style.height = `${height}px`;
 
-            // UPDATED: Inner HTML now includes logo in summary view
             entry.innerHTML = `
                 <div class="timeline-content glass-effect p-6 rounded-lg shadow-lg h-full">
                     <div class="summary-view flex flex-col justify-center items-center h-full text-center">
-                        <img src="${item.logo}" alt="${item.company} Logo" class="max-h-16 w-auto p-2">
-                        <p class="mt-auto text-xs text-slate-500 pt-2">[Hover for details]</p>
+                        <div>
+                            <p class="text-sm text-${item.color}-400">${item.date}</p>
+                            <h3 class="text-xl font-bold text-white mt-1">${item.title}</h3>
+                            <p class="text-md text-slate-400">${item.company}</p>
+                        </div>
+                        <p class="mt-auto text-xs text-slate-500">[Hover for details]</p>
                     </div>
                     <div class="detail-view">
-                        <p class="text-sm text-${item.color}-400 font-semibold">${item.date}</p>
-                        <h3 class="text-xl font-bold text-white mt-1">${item.title}</h3>
-                        <p class="text-md text-slate-400">${item.company}</p>
-                        <p class="mt-4 text-slate-300 text-sm">${item.description}</p>
+                        <p class="text-slate-300 text-sm">${item.description}</p>
                         <div class="mt-4 flex flex-wrap gap-2">${item.tags.map(tag => `<span class="bg-${item.color}-900/50 text-${item.color}-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">${tag}</span>`).join('')}</div>
                     </div>
                 </div>
