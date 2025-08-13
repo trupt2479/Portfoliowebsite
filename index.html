@@ -296,6 +296,11 @@
 
         // --- Gemini API Integration (via Serverless Function) ---
         async function callGemini(prompt, retries = 3, delay = 1000) {
+            // UPDATED: Add a check for local development
+            if (!window.location.hostname.includes('netlify.app') && !window.location.hostname.includes('truptacharya.com')) {
+                return "Portfolio Co-Pilot is only available on the live website.";
+            }
+
             const apiUrl = `/.netlify/functions/call-gemini`;
             const payload = { prompt: prompt };
             try {
@@ -395,12 +400,21 @@
 
         const copilotInput = document.getElementById('copilot-input');
         const copilotResponse = document.getElementById('copilot-response');
-        const portfolioContext = `About Me: I'm an engineer passionate about building intelligent systems...`; // Shortened for brevity
+        
+        // UPDATED: portfolioContext now dynamically builds from the timelineItems array
+        const portfolioContext = `
+            About Me: I'm an engineer passionate about building intelligent systems, with a focus on Machine Learning, AI, and Full Stack Development. My journey has taken me from architecting scalable backend platforms to fine-tuning complex NLP models. I am actively seeking opportunities as a Software Engineer, ML/AI Engineer, or Data Engineer where I can apply my skills to transform complex data into actionable insights and create meaningful, real-world solutions.
+            Education & Experience:
+            ${timelineItems.map(item => `- ${item.title} at ${item.company} (${item.date}): ${item.description.replace(/<br><br><strong>.*?<\/strong>.*|<[^>]*>/g, ' ')}`).join('\n')}
+            Projects:
+            ${projects.map(p => `- ${p.title}: ${p.description}`).join('\n')}
+        `;
+
         copilotInput.addEventListener('keyup', async (e) => {
             if (e.key === 'Enter' && e.target.value) {
                 const query = e.target.value;
                 showLoader(copilotResponse);
-                const prompt = `You are a helpful portfolio assistant... User Question: "${query}"\n\nAnswer:`; // Shortened
+                const prompt = `You are a helpful portfolio assistant for Trupt Acharya. Based on the following context, answer the user's question concisely and conversationally.\n\nContext:\n${portfolioContext}\n\nUser Question: "${query}"\n\nAnswer:`;
                 const responseText = await callGemini(prompt);
                 copilotResponse.innerHTML = responseText.replace(/\n/g, '<br>');
             }
