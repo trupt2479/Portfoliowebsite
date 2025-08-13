@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trupt Acharya | The Intelligence Engineer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            color: #e2e8f0;
+        }
+        #particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        .glass-effect {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 50%;
+            left: -0.625rem;
+            top: 0;
+            background-color: #0a0a0a;
+            border: 4px solid #3b82f6;
+        }
+        .modal-content {
+            animation: slide-up 0.3s ease-out;
+        }
+        @keyframes slide-up {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .tech-logo {
+            transition: transform 0.2s ease-in-out;
+        }
+        .tech-logo:hover {
+            transform: scale(1.1);
+        }
+        .copilot-input:focus {
+            box-shadow: 0 0 0 2px #3b82f6;
+        }
+        /* Scroll Animations */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .scroll-animate.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .loader {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #3b82f6;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass-effect">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-xl font-bold text-white">Trupt Acharya</a>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#about" class="hover:text-blue-400 transition-colors">About</a>
+                <a href="#experience" class="hover:text-blue-400 transition-colors">Experience</a>
+                <a href="#projects" class="hover:text-blue-400 transition-colors">Projects</a>
+                <a href="#contact" class="hover:text-blue-400 transition-colors">Contact</a>
+            </nav>
+            <button id="mobile-menu-button" class="md:hidden text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="#about" class="block py-2 hover:text-blue-400 transition-colors">About</a>
+            <a href="#experience" class="block py-2 hover:text-blue-400 transition-colors">Experience</a>
+            <a href="#projects" class="block py-2 hover:text-blue-400 transition-colors">Projects</a>
+            <a href="#contact" class="block py-2 hover:text-blue-400 transition-colors">Contact</a>
+        </div>
+    </header>
+
+    <main class="pt-24">
+        <!-- Hero Section -->
+        <section id="home" class="relative min-h-[80vh] flex items-center justify-center text-center overflow-hidden">
+            <div class="hero-content container mx-auto px-6 py-24 md:py-32">
+                <h1 class="text-4xl md:text-6xl font-bold text-white leading-tight">The Intelligence Engineer</h1>
+                <p class="mt-4 text-lg md:text-xl text-slate-400 max-w-3xl mx-auto">From Data to Decision: Crafting intelligent systems that bridge the gap between raw information and actionable insights.</p>
+                
+                <div class="mt-12 max-w-2xl mx-auto">
+                    <label for="copilot-input" class="block text-sm font-medium text-slate-300 mb-2">✨ Ask my Portfolio Co-Pilot</label>
+                    <div class="relative">
+                        <input type="text" id="copilot-input" class="copilot-input w-full px-4 py-3 rounded-lg bg-slate-800 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" placeholder="e.g., 'Explain your work with AI' or 'Summarize your experience'">
+                        <div id="copilot-response" class="mt-4 text-left text-slate-300 bg-slate-800/50 p-4 rounded-lg border border-slate-700 hidden"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="container mx-auto px-6 py-20 scroll-animate">
+            <h2 class="text-3xl font-bold text-center text-white mb-12">About Me</h2>
+            <div class="max-w-4xl mx-auto grid md:grid-cols-3 gap-8 items-center">
+                <div class="md:col-span-1 flex justify-center">
+                    <img src="https://placehold.co/256x256/1e293b/e2e8f0?text=Trupt+A." alt="Trupt Acharya" class="rounded-full w-48 h-48 md:w-64 md:h-64 object-cover border-4 border-slate-700 shadow-lg">
+                </div>
+                <div class="md:col-span-2 text-slate-300 space-y-4">
+                    <p class="text-lg">I'm a software engineer and AI enthusiast passionate about building systems that not only function efficiently but also think intelligently. My journey has taken me from optimizing frontend performance to architecting scalable cloud platforms and fine-tuning complex NLP models.</p>
+                    <p>I believe technology's greatest impact lies in its ability to solve real-world problems. Whether it's making sustainability tangible through a simulator or fostering community well-being with a digital affirmation library, I'm driven to use my skills to create meaningful solutions.</p>
+                    <p>My core philosophy is simple: bridge the gap between raw data and intelligent action. I thrive on transforming complex datasets into reliable, user-centric products that deliver clear, actionable insights.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="container mx-auto px-6 py-20 scroll-animate">
+            <h2 class="text-3xl font-bold text-center text-white mb-16">My Journey</h2>
+            <div class="relative max-w-2xl mx-auto border-l-2 border-slate-700 pl-8">
+                <!-- Experience items here -->
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="container mx-auto px-6 py-20 scroll-animate">
+            <h2 class="text-3xl font-bold text-center text-white mb-12">Project Arsenal</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project Cards will be injected here by JS -->
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="container mx-auto px-6 py-20 text-center scroll-animate">
+            <h2 class="text-3xl font-bold text-white">Let's Build Something Intelligent</h2>
+            <p class="mt-4 text-slate-400 max-w-xl mx-auto">I'm always open to discussing new projects, creative ideas, or opportunities to be part of an ambitious team. Feel free to reach out.</p>
+            <div class="mt-8 flex justify-center space-x-6">
+                <a href="mailto:trupt.acharya@nyu.edu" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-transform transform hover:scale-105">Email Me</a>
+                <a href="https://github.com/trupt2479" target="_blank" class="text-slate-400 hover:text-white transition-colors">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.168 6.839 9.49.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.378.203 2.398.1 2.651.64.7 1.03 1.595 1.03 2.688 0 3.848-2.338 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd" /></svg>
+                </a>
+                <a href="https://www.linkedin.com/in/trupt-acharya/" target="_blank" class="text-slate-400 hover:text-white transition-colors">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal -->
+    <div id="project-modal" class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden items-center justify-center p-4">
+        <div id="modal-content" class="modal-content glass-effect rounded-lg shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            <!-- Modal content will be injected by JS -->
+        </div>
+    </div>
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- Data ---
+        const experiences = [
+            {
+                date: 'Jun 2024 - Aug 2024',
+                title: 'Software Development Intern',
+                company: 'Dassault Systèmes',
+                description: 'Engineered an offline NLP assistant to slash manual lookup times for engineers. Fine-tuned a BERT model for domain-specific search, achieving high accuracy and reliability within a constrained network.',
+                tags: ['~90% Accuracy', '-40% Lookup Time', '+35% Test Coverage'],
+                color: 'blue'
+            },
+            {
+                date: 'Dec 2021 - Aug 2023',
+                title: 'Machine Learning Intern',
+                company: 'Scanpoint Geomatics Ltd',
+                description: 'Automated ingestion and processing pipelines for massive geospatial datasets (40-60 GB/week). Trained and tuned YOLOv8 & U-Net models for crop detection and segmentation, delivering actionable map layers to over 500 field surveyors.',
+                tags: ['+22% F1 Score', '-30% Failed Runs', '500+ Users'],
+                color: 'green'
+            },
+            {
+                date: 'Jul 2021 - Dec 2021',
+                title: 'Software Development Engineer Intern',
+                company: 'Cmarix Technolabs Pvt Ltd',
+                description: 'Improved frontend performance and maintainability for client web apps. Refactored 5k+ lines of code, introduced lazy loading and code-splitting, and standardized UI components to reduce bugs and improve user experience.',
+                tags: ['-18% Bundle Size', '+25% FCP', '-30% UI Issues'],
+                color: 'purple'
+            }
+        ];
+        const projects = [
+            { id: 'trip-planner', title: 'AI-Powered Trip Planner', category: 'Full-stack AI Application', description: 'A web app that uses AI to generate personalized travel itineraries based on user preferences.', challenge: 'Eliminate the tedious manual research involved in travel planning by creating an intelligent, conversational agent that builds custom trips on the fly.', mission: 'To develop a full-stack platform that leverages NLP to understand user needs (budget, interests, time) and generates complete, day-by-day travel itineraries with real-world context from Google Maps.', tech: ['Python', 'Flask', 'JavaScript', 'Gemini API', 'Google Maps API', 'MongoDB', 'HTML/CSS', 'Bootstrap'], outcome: [ 'Reduced average planning time by 2-3 hours per trip.', 'Achieved over 80% positive feedback in user testing for its "smart" suggestions.', 'Improved AI output quality by 40% through iterative prompt engineering.', 'Reduced API latency by up to 60% using background processing and caching.' ], interactive: 'tripPlanner' },
+            { id: 'fetal-brain', title: 'Fetal Brain Anomaly Detection', category: 'Deep Learning & Medical Imaging', description: 'A CNN model to detect brain anomalies in 2D fetal ultrasound images, aiding early diagnosis.', challenge: 'The detection of fetal brain anomalies from ultrasounds is subjective and error-prone, especially in low-resource settings. The goal was to build a reliable AI decision support tool.', mission: 'To design, train, and evaluate a Convolutional Neural Network (CNN) that can accurately classify fetal brain ultrasounds as "Normal" or "Abnormal," and to make the model\'s decisions interpretable.', tech: ['Python', 'TensorFlow', 'Keras', 'OpenCV', 'Scikit-learn', 'Matplotlib'], outcome: [ 'Achieved ~91.3% test accuracy, outperforming baseline models by >15%.', 'Reached a 0.94 AUC score, indicating strong classification confidence.', 'Successfully used Grad-CAM heatmaps to visualize model focus, enhancing interpretability for medical use.', 'Overcame small dataset and class imbalance issues through data augmentation and class weighting.' ], interactive: 'fetalBrain' },
+            { id: 'fraud-detection', title: 'Credit Card Fraud Detection', category: 'Machine Learning & FinTech', description: 'An ML system to identify fraudulent transactions in a highly imbalanced dataset.', challenge: 'Fraudulent transactions are extremely rare events (less than 0.2% of data), making them difficult to detect accurately without a high number of false positives.', mission: 'To build and optimize a machine learning model (XGBoost) that maximizes fraud detection (Recall) while keeping false alarms (low False Positive Rate) to a minimum for real-world banking systems.', tech: ['Python', 'Pandas', 'Scikit-learn', 'XGBoost', 'LightGBM', 'Matplotlib'], outcome: [ 'Best model (XGBoost) achieved 95.2% Recall and 89.4% Precision.', 'Maintained a low False Positive Rate of under 2.3%.', 'Used SHAP and permutation importance for model explainability, identifying key fraud indicators.', 'Gained deep experience in handling highly imbalanced datasets and selecting appropriate evaluation metrics.' ], interactive: 'fraudDetection' },
+            { id: 'ecommerce-platform', title: 'Scalable E-Commerce Platform', category: 'Full Stack & Cloud DevOps', description: 'A production-ready e-commerce system designed for high traffic, security, and performance.', challenge: 'Building an e-commerce platform that goes beyond basic functionality to handle high concurrency, secure payments, and maintain performance at scale.', mission: 'To architect and deploy a modular, containerized e-commerce application using a modern tech stack (React, Flask, Docker, AWS) with a focus on scalability, reliability, and best practices in DevOps.', tech: ['Python', 'Flask', 'React.js', 'PostgreSQL', 'Docker', 'Redis', 'AWS', 'Stripe API'], outcome: [ 'Improved page load time by 42% by implementing Redis caching.', 'Handled 500 concurrent users in load tests with stable performance.', 'Implemented a CI/CD pipeline with GitHub Actions, reducing deployment friction.', 'Gained hands-on experience with cloud-native deployments, containerization, and microservice principles.' ], interactive: 'ecommerce' },
+            { id: 'hindi-lip-reading', title: 'Hindi Lip-Reading & VSR Model', category: 'Deep Learning & NLP Research', description: 'A pioneering project to create a Hindi lip-reading dataset and a Visual Speech Recognition model.', challenge: 'Visual Speech Recognition (VSR) is a major challenge for low-resource languages like Hindi due to the lack of large-scale, curated datasets and the ambiguity of lip movements (homophemes).', mission: 'To create a high-quality, 250+ hour Hindi lip-reading dataset from scratch and develop an end-to-end deep learning model (3D CNN + ResNet + Conformer) to perform visual transcription.', tech: ['Python', 'PyTorch', 'FFmpeg', 'SyncNet', 'ResNet-18', 'Conformer'], outcome: [ 'Successfully created a 250+ hour, multi-speaker Hindi VSR dataset.', 'Developed a fully automated preprocessing pipeline for video, audio, and text data.', 'Achieved a 71.4% Word Error Rate (WER), a promising result for an early-stage model in a low-resource language.', 'Gained full-stack AI research experience, from data creation to model implementation.' ] },
+            { id: 'network-analyzer', title: 'Network Traffic Analyzer', category: 'Networking & Cybersecurity', description: 'A Python-based tool to monitor, analyze, and visualize live network traffic for security and diagnostics.', challenge: 'Commercial network analysis tools can be complex and heavyweight. The goal was to create a lightweight, customizable, and easy-to-understand tool for real-time packet inspection.', mission: 'To build a system using Scapy and Pandas that could sniff live network packets, log them efficiently to SQLite, analyze them for anomalies (like port scans), and visualize traffic patterns.', tech: ['Python', 'Scapy', 'Pandas', 'Matplotlib', 'SQLite'], outcome: [ 'Successfully flagged simulated SYN floods and data exfiltration scenarios.', 'Achieved ~90% accuracy in identifying basic protocols against Wireshark benchmarks.', 'Gained deep knowledge of OSI layers, packet mechanics, and security threat signatures.', 'Designed an efficient schema for high-throughput packet logging and querying.' ] },
+            { id: 'affirmation-library', title: 'Public Affirmation Library', category: 'Full-stack Web App & Database Systems', description: 'A community-driven platform for sharing positive affirmations to promote mental well-being.', challenge: 'Creating a safe, positive, and robust digital space for emotional support requires careful backend engineering, secure text handling, and an empathetic user interface.', mission: 'To engineer a platform with a complex PostgreSQL backend (including stored procedures and triggers) and a TypeScript frontend, allowing users to submit, browse, and favorite affirmations securely and anonymously.', tech: ['Python', 'TypeScript', 'PostgreSQL', 'Docker', 'HTML/CSS', 'JavaScript'], outcome: [ 'System supported 1000+ concurrent interactions with minimal latency in tests.', 'Query optimization and connection pooling led to a 35% improvement in load time.', 'Gained hands-on experience with advanced PostgreSQL features like PL/pgSQL.', 'Learned about designing for emotional impact and empathy in technology.'], interactive: 'affirmationLibrary' },
+            { id: 'env-simulator', title: 'Environmental Impact Simulator', category: 'Java Desktop Application & Data Visualization', description: 'A Java Swing application to quantify and visualize the ecological impact of everyday human activities.', challenge: 'Many people are unaware of the tangible environmental footprint of their daily choices. The goal was to create a tool to raise awareness through data-driven insights.', mission: 'To develop a user-focused desktop application that allows detailed tracking of activities like travel and energy use, providing interactive visualizations and actionable recommendations for sustainable behavior.', tech: ['Java', 'Swing'], outcome: [ 'Serves as an effective educational tool to show unseen environmental costs.', 'Encourages greener choices through data-backed behavioral nudging.', 'Mastered Java Swing, object-oriented design, and data visualization principles.', 'Gained a deeper understanding of sustainability through simulation modeling.'], interactive: 'envSimulator' }
+        ];
+        const techLogos = { 'Python': 'https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white', 'Flask': 'https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white', 'JavaScript': 'https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black', 'Gemini API': 'https://img.shields.io/badge/Gemini_API-4285F4?style=for-the-badge&logo=google-gemini&logoColor=white', 'Google Maps API': 'https://img.shields.io/badge/Google_Maps-4285F4?style=for-the-badge&logo=googlemaps&logoColor=white', 'MongoDB': 'https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white', 'HTML/CSS': 'https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white', 'Bootstrap': 'https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white', 'TensorFlow': 'https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white', 'Keras': 'https://img.shields.io/badge/Keras-D00000?style=for-the-badge&logo=keras&logoColor=white', 'OpenCV': 'https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white', 'Scikit-learn': 'https://img.shields.io/badge/scikit_learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white', 'Matplotlib': 'https://img.shields.io/badge/Matplotlib-11557c?style=for-the-badge&logo=matplotlib&logoColor=white', 'Pandas': 'https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white', 'XGBoost': 'https://img.shields.io/badge/XGBoost-006100?style=for-the-badge&logo=xgboost&logoColor=white', 'LightGBM': 'https://img.shields.io/badge/LightGBM-444444?style=for-the-badge&logo=lightgbm&logoColor=white', 'React.js': 'https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black', 'PostgreSQL': 'https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white', 'Docker': 'https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white', 'Redis': 'https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white', 'AWS': 'https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white', 'Stripe API': 'https://img.shields.io/badge/Stripe-626CD9?style=for-the-badge&logo=stripe&logoColor=white', 'PyTorch': 'https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white', 'FFmpeg': 'https://img.shields.io/badge/FFmpeg-007800?style=for-the-badge&logo=ffmpeg&logoColor=white', 'SyncNet': 'https://img.shields.io/badge/SyncNet-992244?style=for-the-badge&logoColor=white', 'ResNet-18': 'https://img.shields.io/badge/ResNet--18-8A2BE2?style=for-the-badge&logoColor=white', 'Conformer': 'https://img.shields.io/badge/Conformer-4682B4?style=for-the-badge&logoColor=white', 'Scapy': 'https://img.shields.io/badge/Scapy-E05A17?style=for-the-badge&logoColor=white', 'SQLite': 'https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white', 'Java': 'https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white', 'Swing': 'https://img.shields.io/badge/Swing-557c9b?style=for-the-badge&logoColor=white', 'TypeScript': 'https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white', };
+
+        // --- Gemini API Integration (via Serverless Function) ---
+        async function callGemini(prompt, retries = 3, delay = 1000) {
+            // The URL now points to your secure serverless function
+            const apiUrl = `/.netlify/functions/call-gemini`;
+            const payload = { prompt: prompt };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    if (response.status === 429 && retries > 0) { // Handle rate limiting
+                        await new Promise(res => setTimeout(res, delay));
+                        return callGemini(prompt, retries - 1, delay * 2);
+                    }
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                return result.text;
+
+            } catch (error) {
+                console.error("API call failed:", error);
+                if (retries > 0) {
+                     await new Promise(res => setTimeout(res, delay));
+                     return callGemini(prompt, retries - 1, delay * 2);
+                }
+                return `Sorry, an error occurred: ${error.message}`;
+            }
+        }
+
+        function showLoader(element) {
+            element.innerHTML = '<div class="flex justify-center items-center"><div class="loader"></div></div>';
+            element.classList.remove('hidden');
+        }
+
+        // --- Interactive Particle BG ---
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particlesArray;
+        const mouse = { x: null, y: null };
+
+        function setCanvasDimensions() {
+            const heroSection = document.getElementById('home');
+            canvas.width = heroSection.offsetWidth;
+            canvas.height = heroSection.offsetHeight;
+        }
+
+        window.addEventListener('mousemove', (event) => { mouse.x = event.clientX; mouse.y = event.clientY; });
+        window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
+        
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x; this.y = y; this.directionX = directionX; this.directionY = directionY; this.size = size; this.color = color;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+            update() {
+                if (this.x > canvas.width || this.x < 0) this.directionX = -this.directionX;
+                if (this.y > canvas.height || this.y < 0) this.directionY = -this.directionY;
+                this.x += this.directionX;
+                this.y += this.directionY;
+                this.draw();
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            let numberOfParticles = (canvas.width * canvas.height) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 2.5) + 1;
+                let x = Math.random() * canvas.width;
+                let y = Math.random() * canvas.height;
+                let directionX = (Math.random() * 0.4) - 0.2;
+                let directionY = (Math.random() * 0.4) - 0.2;
+                let color = 'rgba(59, 130, 246, 0.3)';
+                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+            }
+        }
+
+        function connectParticles() {
+            let opacityValue = 1;
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
+                                 + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                    if (distance < (canvas.width/7) * (canvas.height/7)) {
+                        opacityValue = 1 - (distance/20000);
+                        ctx.strokeStyle = `rgba(59, 130, 246, ${opacityValue * 0.2})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animateParticles() {
+            requestAnimationFrame(animateParticles);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+            }
+            connectParticles();
+        }
+
+        setCanvasDimensions();
+        initParticles();
+        animateParticles();
+
+        // Use ResizeObserver to adjust canvas on content change
+        const heroResizeObserver = new ResizeObserver(entries => {
+            setCanvasDimensions();
+            initParticles(); // Re-initialize particles for new dimensions
+        });
+        heroResizeObserver.observe(document.getElementById('home'));
+
+
+        // --- Scroll Animations ---
+        const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.1 });
+        document.querySelectorAll('.scroll-animate').forEach(el => observer.observe(el));
+
+        // --- Mobile Menu ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        mobileMenu.addEventListener('click', (e) => { if (e.target.tagName === 'A') mobileMenu.classList.add('hidden'); });
+
+        // --- Portfolio Co-Pilot (Gemini Powered) ---
+        const copilotInput = document.getElementById('copilot-input');
+        const copilotResponse = document.getElementById('copilot-response');
+        const portfolioContext = `
+            About Me: A software engineer and AI enthusiast passionate about building intelligent systems. My philosophy is to bridge the gap between raw data and intelligent action.
+            Experience: 
+            ${experiences.map(exp => `- ${exp.title} at ${exp.company} (${exp.date}): ${exp.description}`).join('\n')}
+            Projects:
+            ${projects.map(p => `- ${p.title}: ${p.description}`).join('\n')}
+        `;
+
+        copilotInput.addEventListener('keyup', async (e) => {
+            if (e.key === 'Enter' && e.target.value) {
+                const query = e.target.value;
+                showLoader(copilotResponse);
+                const prompt = `You are a helpful portfolio assistant for Trupt Acharya. Based on the following context, answer the user's question concisely and conversationally.\n\nContext:\n${portfolioContext}\n\nUser Question: "${query}"\n\nAnswer:`;
+                const responseText = await callGemini(prompt);
+                copilotResponse.innerHTML = responseText.replace(/\n/g, '<br>');
+            }
+        });
+
+        // --- Render Experience Timeline ---
+        const experienceContainer = document.querySelector('#experience .relative');
+        experiences.forEach(exp => {
+            const item = document.createElement('div');
+            item.className = 'mb-12 timeline-item';
+            item.innerHTML = `
+                <div class="glass-effect p-6 rounded-lg shadow-lg">
+                    <p class="text-sm text-${exp.color}-400">${exp.date}</p>
+                    <h3 class="text-xl font-bold text-white mt-1">${exp.title}</h3>
+                    <p class="text-md text-slate-400">${exp.company}</p>
+                    <p class="mt-4 text-slate-300">${exp.description}</p>
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        ${exp.tags.map(tag => `<span class="bg-${exp.color}-900/50 text-${exp.color}-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">${tag}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+            experienceContainer.appendChild(item);
+        });
+        
+        // --- Project Cards & Modal ---
+        const projectsContainer = document.querySelector('#projects .grid');
+        const modal = document.getElementById('project-modal');
+        const modalContent = document.getElementById('modal-content');
+
+        projects.forEach(project => {
+            const card = document.createElement('div');
+            card.className = 'glass-effect p-6 rounded-lg shadow-lg flex flex-col justify-between hover:-translate-y-2 transition-transform cursor-pointer';
+            card.dataset.projectId = project.id;
+            card.innerHTML = `
+                <div>
+                    <h3 class="text-xl font-bold text-white">${project.title}</h3>
+                    <p class="text-sm text-blue-400 mt-1">${project.category}</p>
+                    <p class="mt-4 text-slate-300">${project.description}</p>
+                </div>
+                <button class="mt-6 text-left font-semibold text-white hover:text-blue-400 transition-colors">
+                    View Case Study &rarr;
+                </button>
+            `;
+            projectsContainer.appendChild(card);
+        });
+
+        projectsContainer.addEventListener('click', (e) => {
+            const card = e.target.closest('[data-project-id]');
+            if (card) {
+                const projectId = card.dataset.projectId;
+                const project = projects.find(p => p.id === projectId);
+                openModal(project);
+            }
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target.id === 'project-modal' || e.target.id === 'close-modal-button') {
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        function openModal(project) {
+            modalContent.innerHTML = `
+                <div class="p-6 md:p-8">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-2xl md:text-3xl font-bold text-white">${project.title}</h3>
+                            <p class="text-md text-blue-400 mt-1">${project.category}</p>
+                        </div>
+                        <button id="close-modal-button" class="text-3xl leading-none text-slate-400 hover:text-white">&times;</button>
+                    </div>
+
+                    <div class="mt-6 grid md:grid-cols-2 gap-8">
+                        <div class="space-y-6">
+                            <div>
+                                <h4 class="font-bold text-white mb-2">The Challenge</h4>
+                                <p class="text-slate-300">${project.challenge}</p>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white mb-2">My Mission</h4>
+                                <p class="text-slate-300">${project.mission}</p>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white mb-2">Tech Stack</h4>
+                                <div class="flex flex-wrap gap-2">
+                                    ${project.tech.map(t => `<img src="${techLogos[t] || ''}" alt="${t}" class="tech-logo h-6">`).join('')}
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white mb-2">Key Outcomes</h4>
+                            <ul class="list-disc list-inside text-slate-300 space-y-2">
+                                ${project.outcome.map(o => `<li>${o}</li>`).join('')}
+                            </ul>
+                            <div class="mt-4">
+                                <button id="explain-project-btn" class="w-full bg-indigo-600/80 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md transition-colors flex items-center justify-center gap-2">
+                                    ✨ Explain This Project to Me
+                                </button>
+                                <div id="project-explanation" class="mt-2 p-3 bg-slate-800/70 rounded-md text-slate-300 text-sm hidden"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="interactive-container" class="mt-8 p-6 bg-slate-900/50 rounded-lg border border-slate-700"></div>
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+
+            document.getElementById('explain-project-btn').addEventListener('click', async function() {
+                const explanationDiv = document.getElementById('project-explanation');
+                showLoader(explanationDiv);
+                const projectContext = `Project Title: ${project.title}. Challenge: ${project.challenge}. Mission: ${project.mission}. Tech Used: ${project.tech.join(', ')}.`;
+                const prompt = `You are a helpful portfolio assistant. Explain the following project in simple, easy-to-understand terms for a non-technical audience. Keep it to 2-3 sentences.\n\nProject Details:\n${projectContext}\n\nExplanation:`;
+                const explanation = await callGemini(prompt);
+                explanationDiv.innerHTML = explanation.replace(/\n/g, '<br>');
+            });
+
+            const interactiveContainer = document.getElementById('interactive-container');
+            if (project.interactive) {
+                loadInteractiveElement(interactiveContainer, project.interactive);
+            } else {
+                interactiveContainer.innerHTML = `<p class="text-center text-slate-400">Details for this project are available upon request.</p>`;
+            }
+        }
+
+        async function loadInteractiveElement(container, type) {
+            container.innerHTML = '';
+            switch (type) {
+                case 'tripPlanner':
+                    container.innerHTML = `
+                        <h5 class="font-bold text-white text-center mb-4">Live Demo: AI Trip Planner</h5>
+                        <div class="space-y-4 max-w-md mx-auto">
+                             <div>
+                                <label for="trip-city" class="text-sm text-slate-300">Destination</label>
+                                <input id="trip-city" type="text" class="w-full mt-1 px-3 py-2 rounded-md bg-slate-800 border border-slate-600 focus:outline-none focus:ring-1 focus:ring-blue-500" value="Paris">
+                            </div>
+                            <button id="suggest-activities-btn" class="w-full bg-teal-600/80 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-md transition-colors flex items-center justify-center gap-2">✨ Suggest Activities with Gemini</button>
+                        </div>
+                        <div id="trip-output" class="mt-4 p-4 bg-slate-800 rounded-md text-slate-300 hidden"></div>
+                    `;
+                    document.getElementById('suggest-activities-btn').addEventListener('click', async () => {
+                        const city = document.getElementById('trip-city').value || 'Paris';
+                        const outputDiv = document.getElementById('trip-output');
+                        showLoader(outputDiv);
+                        const prompt = `You are a creative travel assistant. Suggest 3 unique and interesting activities for a tourist visiting ${city}. Provide a short, one-sentence description for each. Format the output as a simple list.`;
+                        const suggestions = await callGemini(prompt);
+                        outputDiv.innerHTML = suggestions.replace(/\n/g, '<br>');
+                    });
+                    break;
+                case 'fetalBrain':
+                    container.innerHTML = `<h5 class="font-bold text-white text-center mb-4">Interactive Demo: Explainable AI (XAI)</h5> <p class="text-center text-sm text-slate-400 mb-4">Drag the slider to reveal where the AI model is "looking" using a Grad-CAM heatmap.</p> <div class="relative max-w-sm mx-auto aspect-square"> <img src="https://placehold.co/400x400/000000/FFFFFF?text=Fetal+Ultrasound" class="absolute inset-0 w-full h-full object-cover rounded-md" alt="Fetal Ultrasound"> <div id="heatmap-overlay" class="absolute inset-0 w-1/2 h-full overflow-hidden"> <img src="https://placehold.co/800x400/FF0000/FFFFFF?text=Heatmap" style="width: 200%; height: 100%; max-width: 200%;" class="object-cover rounded-md" alt="Grad-CAM Heatmap"> </div> <input type="range" min="0" max="100" value="50" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" oninput="document.getElementById('heatmap-overlay').style.width = this.value + '%'"> </div>`;
+                    break;
+                case 'fraudDetection':
+                    container.innerHTML = `<h5 class="font-bold text-white text-center mb-4">Interactive Demo: Precision vs. Recall</h5> <p class="text-center text-sm text-slate-400 mb-4">Adjust the model's detection threshold to see its effect on performance metrics.</p> <div class="max-w-lg mx-auto"> <canvas id="fraudChart"></canvas> <div class="mt-4"> <label for="threshold-slider" class="text-sm text-slate-300">Detection Threshold: <span id="threshold-value" class="font-bold text-white">0.5</span></label> <input id="threshold-slider" type="range" min="0.1" max="0.9" value="0.5" step="0.01" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer"> </div> </div>`;
+                    const ctx = document.getElementById('fraudChart').getContext('2d');
+                    const fraudChart = new Chart(ctx, { type: 'bar', data: { labels: ['Precision (Correct Alerts)', 'Recall (Frauds Caught)'], datasets: [{ label: 'Model Performance', data: [89.4, 95.2], backgroundColor: ['rgba(59, 130, 246, 0.5)', 'rgba(22, 163, 74, 0.5)'], borderColor: ['rgba(59, 130, 246, 1)', 'rgba(22, 163, 74, 1)'], borderWidth: 1 }] }, options: { scales: { y: { beginAtZero: true, max: 100, ticks: { color: '#94a3b8' } }, x: { ticks: { color: '#94a3b8' } } }, plugins: { legend: { display: false } } } });
+                    document.getElementById('threshold-slider').addEventListener('input', (e) => { const threshold = parseFloat(e.target.value); document.getElementById('threshold-value').textContent = threshold.toFixed(2); const precision = 20 + (threshold * 90); const recall = 110 - (threshold * 80); fraudChart.data.datasets[0].data = [precision, recall]; fraudChart.update(); });
+                    break;
+                case 'ecommerce':
+                     container.innerHTML = `<h5 class="font-bold text-white text-center mb-4">Architecture: Scalable Cloud Deployment</h5> <p class="text-center text-sm text-slate-400 mb-4">This diagram illustrates the cloud-native architecture designed for performance and reliability.</p> <div class="bg-slate-800 p-4 rounded-md border border-slate-700 text-center font-mono text-sm"> <p class="text-green-400">[User via Browser]</p> <p class="text-slate-400">|</p> <p class="text-slate-400">V</p> <div class="p-2 border border-dashed border-slate-600 rounded-md"> <p class="text-yellow-400">[AWS Cloud]</p> <p class="text-slate-400">| --> [Nginx Reverse Proxy on EC2]</p> <p class="text-slate-400">|           |</p> <p class="text-slate-400">+-- [React Frontend (Docker)] &lt;--&gt; [Flask Backend API (Docker)] --+-- [Stripe API]</p> <p class="text-slate-400">                                       |                    |</p> <p class="text-slate-400">                                       +-- [Redis (Cache)]    +-- [PostgreSQL (DB)]</p> </div> <p class="text-slate-400 mt-2">Static Assets (Images) served from [AWS S3]</p> </div>`;
+                     break;
+                case 'affirmationLibrary':
+                    container.innerHTML = `<h5 class="font-bold text-white text-center mb-4">Live Demo: Public Affirmation Library</h5> <div class="max-w-lg mx-auto"> <div id="affirmations-list" class="space-y-2 mb-4 h-24 overflow-y-auto p-2 bg-slate-800 rounded-md"> <p class="text-slate-300 p-2 rounded-md bg-slate-700/50">You are capable of amazing things.</p> </div> <div class="flex gap-2"> <input id="affirmation-input" type="text" class="flex-grow px-3 py-2 rounded-md bg-slate-800 border border-slate-600 focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Share a positive message..."> <button id="submit-affirmation" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition-colors">Share</button> </div> </div>`;
+                    document.getElementById('submit-affirmation').addEventListener('click', () => { const input = document.getElementById('affirmation-input'); const list = document.getElementById('affirmations-list'); if (input.value.trim()) { const newAffirmation = document.createElement('p'); newAffirmation.className = 'text-slate-300 p-2 rounded-md bg-slate-700/50 animate-pulse'; newAffirmation.textContent = input.value; list.appendChild(newAffirmation); list.scrollTop = list.scrollHeight; input.value = ''; setTimeout(() => newAffirmation.classList.remove('animate-pulse'), 500); } });
+                    break;
+                case 'envSimulator':
+                    container.innerHTML = `<h5 class="font-bold text-white text-center mb-4">Interactive Demo: Environmental Impact</h5> <p class="text-center text-sm text-slate-400 mb-4">Add activities to see their cumulative impact on the environment.</p> <div class="max-w-lg mx-auto"> <canvas id="envChart"></canvas> <div class="mt-4 flex flex-wrap gap-2 justify-center"> <button data-activity="car" class="bg-red-600/50 hover:bg-red-600 text-white text-sm font-bold py-1 px-3 rounded-md transition-colors">Add Car Trip</button> <button data-activity="energy" class="bg-yellow-600/50 hover:bg-yellow-600 text-white text-sm font-bold py-1 px-3 rounded-md transition-colors">Add Energy Use</button> <button data-activity="water" class="bg-cyan-600/50 hover:bg-cyan-600 text-white text-sm font-bold py-1 px-3 rounded-md transition-colors">Add Water Use</button> </div> </div>`;
+                    const envCtx = document.getElementById('envChart').getContext('2d');
+                    const envChart = new Chart(envCtx, { type: 'bar', data: { labels: ['Carbon (kg)', 'Energy (kWh)', 'Water (L)'], datasets: [{ label: 'Total Impact', data: [0, 0, 0], backgroundColor: ['rgba(220, 38, 38, 0.5)', 'rgba(234, 179, 8, 0.5)', 'rgba(6, 182, 212, 0.5)'], borderColor: ['rgba(220, 38, 38, 1)', 'rgba(234, 179, 8, 1)', 'rgba(6, 182, 212, 1)'], borderWidth: 1 }] }, options: { indexAxis: 'y', scales: { x: { beginAtZero: true, ticks: { color: '#94a3b8' } }, y: { ticks: { color: '#94a3b8' } } }, plugins: { legend: { display: false } } } });
+                    container.querySelector('.justify-center').addEventListener('click', (e) => { if(e.target.dataset.activity) { const activity = e.target.dataset.activity; if (activity === 'car') envChart.data.datasets[0].data[0] += 20; if (activity === 'energy') envChart.data.datasets[0].data[1] += 50; if (activity === 'water') envChart.data.datasets[0].data[2] += 100; envChart.update(); } });
+                    break;
+            }
+        }
+    });
+    </script>
+</body>
+</html>
