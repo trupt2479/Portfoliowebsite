@@ -31,7 +31,8 @@ exports.handler = async function(event, context) {
     }
 
     // 3. Prepare the request to the actual Gemini API.
-    const geminiApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${GEMINI_API_KEY}`;
+    // UPDATED: Changed model name to gemini-2.5-flash-preview-09-2025 for v1beta compatibility
+    const geminiApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${GEMINI_API_KEY}`;
     
     const requestPayload = {
         contents: [{
