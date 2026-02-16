@@ -22,6 +22,7 @@
             font-family: 'Inter', sans-serif;
             background-color: #0a0a0a;
             color: #e2e8f0;
+            overflow-x: hidden;
         }
         #particle-canvas {
             position: fixed;
@@ -45,7 +46,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
-        /* Two-Sided Timeline Styles */
+        /* Timeline Styles */
         #timeline-container {
             position: relative;
             max-width: 56rem;
@@ -78,12 +79,9 @@
             position: absolute;
             width: calc(50% - 2rem);
         }
-        .timeline-left {
-            left: 0;
-        }
-        .timeline-right {
-            left: calc(50% + 2rem);
-        }
+        .timeline-left { left: 0; }
+        .timeline-right { left: calc(50% + 2rem); }
+        
         .timeline-content {
             position: relative;
             overflow: hidden;
@@ -99,25 +97,12 @@
             pointer-events: none;
             overflow-y: auto;
         }
-        .timeline-content:hover .summary-view {
-            opacity: 0;
-        }
-        .timeline-content:hover .detail-view {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .detail-view::-webkit-scrollbar { width: 6px; }
-        .detail-view::-webkit-scrollbar-track { background: transparent; }
-        .detail-view::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
-        .detail-view::-webkit-scrollbar-thumb:hover { background: #64748b; }
-
+        .timeline-content:hover .summary-view { opacity: 0; }
+        .timeline-content:hover .detail-view { opacity: 1; pointer-events: auto; }
+        
         @media (max-width: 768px) {
-            #timeline-container::after {
-                left: 20px;
-            }
-            .timeline-year {
-                left: 20px;
-            }
+            #timeline-container::after { left: 20px; }
+            .timeline-year { left: 20px; }
             .timeline-entry {
                 width: calc(100% - 50px);
                 left: 50px !important;
@@ -132,24 +117,17 @@
             from { transform: translateY(20px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
-        .tech-logo {
-            transition: transform 0.2s ease-in-out;
-        }
-        .tech-logo:hover {
-            transform: scale(1.1);
-        }
-        .copilot-input:focus {
-            box-shadow: 0 0 0 2px #3b82f6;
-        }
+        .tech-logo { transition: transform 0.2s ease-in-out; }
+        .tech-logo:hover { transform: scale(1.1); }
+        .copilot-input:focus { box-shadow: 0 0 0 2px #3b82f6; }
+        
         .scroll-animate {
             opacity: 0;
             transform: translateY(30px);
             transition: opacity 0.6s ease-out, transform 0.6s ease-out;
         }
-        .scroll-animate.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .scroll-animate.visible { opacity: 1; transform: translateY(0); }
+        
         .loader {
             border: 2px solid #f3f3f3;
             border-top: 2px solid #3b82f6;
@@ -162,22 +140,21 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        .filter-btn {
-            transition: all 0.2s ease-in-out;
+        
+        .filter-btn { transition: all 0.2s ease-in-out; }
+        .filter-btn.active { background-color: #3b82f6; color: #ffffff; font-weight: 600; }
+        
+        .project-card { transition: opacity 0.4s ease, transform 0.4s ease; }
+        .project-card.hidden { opacity: 0; transform: scale(0.95); pointer-events: none; position: absolute; }
+
+        /* Styles for Vantage Radar Demo */
+        .radar-line {
+            transform-origin: center;
+            animation: radar-sweep 4s linear infinite;
         }
-        .filter-btn.active {
-            background-color: #3b82f6;
-            color: #ffffff;
-            font-weight: 600;
-        }
-        .project-card {
-            transition: opacity 0.4s ease, transform 0.4s ease;
-        }
-        .project-card.hidden {
-            opacity: 0;
-            transform: scale(0.95);
-            pointer-events: none;
-            position: absolute;
+        @keyframes radar-sweep {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -210,6 +187,7 @@
             <div class="hero-content container mx-auto px-6 py-16 md:py-24">
                 <h1 class="text-4xl md:text-6xl font-bold text-white leading-tight">The Intelligence Engineer</h1>
                 <p class="mt-4 text-lg md:text-xl text-slate-400 max-w-3xl mx-auto">From Data to Decision: Crafting intelligent systems that bridge the gap between raw information and actionable insights.</p>
+                
                 <div class="mt-8 max-w-3xl mx-auto bg-slate-800/50 border border-slate-700 rounded-lg p-4">
                     <h3 class="text-md font-semibold text-blue-300 mb-3">Seeking Opportunities In:</h3>
                     <div class="flex flex-wrap justify-center gap-2 md:gap-3">
@@ -220,10 +198,11 @@
                         <span class="bg-slate-700 text-slate-200 text-sm font-medium px-3 py-1 rounded-full">Backend Engineer</span>
                     </div>
                 </div>
+
                 <div class="mt-8 max-w-2xl mx-auto">
                     <label for="copilot-input" class="block text-sm font-medium text-slate-300 mb-2">✨ Ask my Portfolio Co-Pilot</label>
                     <div class="relative">
-                        <input type="text" id="copilot-input" class="copilot-input w-full px-4 py-3 rounded-lg bg-slate-800 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" placeholder="e.g., 'What is LifeHUD?'">
+                        <input type="text" id="copilot-input" class="copilot-input w-full px-4 py-3 rounded-lg bg-slate-800 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" placeholder="e.g., 'What are you building at IpserLab?' or 'Tell me about Vantage'">
                         <div id="copilot-response" class="mt-4 text-left text-slate-300 bg-slate-800/50 p-4 rounded-lg border border-slate-700 hidden"></div>
                     </div>
                 </div>
@@ -234,11 +213,11 @@
             <h2 class="text-3xl font-bold text-center text-white mb-12">About Me</h2>
             <div class="max-w-4xl mx-auto grid md:grid-cols-3 gap-8 items-center">
                 <div class="md:col-span-1 flex justify-center">
-                    <img src="assets/profile.jpg" alt="Trupt Acharya" class="rounded-full w-48 h-48 md:w-64 md:h-64 object-cover border-4 border-slate-700 shadow-lg">
+                    <img src="assets/profile.jpg" alt="Trupt Acharya" class="rounded-full w-48 h-48 md:w-64 md:h-64 object-cover border-4 border-slate-700 shadow-lg" onerror="this.src='https://placehold.co/300x300/1e293b/cbd5e1?text=TA'">
                 </div>
                 <div class="md:col-span-2 text-slate-300 space-y-4 text-lg">
                     <p>I'm an engineer passionate about building intelligent systems, with a focus on <strong>Machine Learning</strong>, <strong>AI</strong>, and <strong>Full Stack Development</strong>. My journey has taken me from architecting scalable <strong>backend</strong> platforms to fine-tuning complex NLP models.</p>
-                    <p>I am actively seeking opportunities as a <strong>Software Engineer</strong>, <strong>ML/AI Engineer</strong>, or <strong>Data Engineer</strong> where I can apply my skills to transform complex data into actionable insights and create meaningful, real-world solutions.</p>
+                    <p>Currently, I am working as a <strong>Software Engineer Intern</strong> at IpserLab LLC, developing real-time computer vision applications for mobile.</p>
                 </div>
             </div>
         </section>
@@ -296,83 +275,23 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        mobileMenu.addEventListener('click', (e) => { if (e.target.tagName === 'A') mobileMenu.classList.add('hidden'); });
+
         // --- Data ---
         const timelineItems = [
-            { 
-                type: 'experience', 
-                startYear: 2025, 
-                endYear: 2026, 
-                date: 'September 2025 - Present', 
-                title: 'Software Engineer Intern (Full-Time)', 
-                company: 'IpserLab Startup, LLC', 
-                description: 'Developing "AuraCam", a mobile application providing real-time computer vision guidance for photo composition. Engineered a high-performance CV pipeline using Flutter and Dart. Optimized UI rendering to 60 FPS while handling heavy on-device inference using Google ML Kit. Implemented advanced frame throttling and concurrency controls to manage device battery and thermal load.', 
-                tags: ['Flutter', 'Dart', 'Google ML Kit', 'Computer Vision', 'Performance Optimization'], 
-                color: 'blue' 
-            },
-            { 
-                type: 'education', 
-                startYear: 2023, 
-                endYear: 2025, 
-                date: 'Sep 2023 - May 2025', 
-                title: 'Master of Science, Computer Engineering', 
-                company: 'New York University (NYU)', 
-                description: 'Relevant Coursework: Machine Learning, Internet Architecture Protocol, Data Structure and Algorithm, Real-time Embedded Systems, Computer Systems Architecture, Intro to Java, VLSI System Design, Advanced Topics of Computer Vision, Big Data, Database Management Systems.', 
-                tags: ['Tandon School of Engineering'], 
-                color: 'purple' 
-            },
-            { 
-                type: 'experience', 
-                startYear: 2024, 
-                endYear: 2024, 
-                date: 'Jun 2024 - Aug 2024', 
-                title: 'Software Development Intern', 
-                company: 'Dassault Systèmes', 
-                description: 'Engineered an offline NLP assistant to slash manual lookup times for engineers. Fine-tuned a BERT model for domain-specific search, achieving high accuracy and reliability within a constrained network.', 
-                tags: ['NLP', 'BERT', 'Software Architecture'], 
-                color: 'blue' 
-            },
-            { 
-                type: 'experience', 
-                startYear: 2021, 
-                endYear: 2023, 
-                date: 'January 2021 - August 2023', 
-                title: 'Software Engineer / Machine Learning Engineer', 
-                company: 'Scanpoint Geomatics Ltd', 
-                description: 'Automated ingestion and processing pipelines for massive geospatial datasets (40-60 GB/week). Trained and tuned YOLOv8 & U-Net models for crop detection and segmentation, delivering actionable map layers to over 500 field surveyors. Improved F1 score by 22% through custom data augmentation techniques.', 
-                tags: ['Machine Learning', 'Computer Vision', 'Data Pipelines', 'YOLOv8'], 
-                color: 'green' 
-            },
-            { 
-                type: 'education', 
-                startYear: 2019, 
-                endYear: 2023, 
-                date: '2019 - 2023', 
-                title: 'Bachelor of Technology, Information Technology', 
-                company: 'SRM Institute of Science & Technology (SRMIST)', 
-                description: 'Relevant Coursework: Object Oriented Design and Programming, Operating Systems, Software Engineering, AI. <br><br><strong>On-Campus Activity:</strong> As an <strong>Instructor for AI in Robotics</strong>, I led sessions for 200+ students on microcontroller programming (ESP32), sensors, and computer vision with Python/OpenCV.', 
-                tags: ['SRMIST', 'Teaching', 'AI in Robotics'], 
-                color: 'purple' 
-            }
+            { type: 'experience', startYear: 2025, endYear: 2026, date: 'September 2025 - Present', title: 'Software Engineer Intern (Full-Time)', company: 'IpserLab Startup, LLC', description: 'Developing "AuraCam", a mobile application providing real-time computer vision guidance for photo composition. Engineered a high-performance CV pipeline using Flutter and Dart. Optimized UI rendering to 60 FPS while handling heavy on-device inference using Google ML Kit. Implemented advanced frame throttling and concurrency controls to manage device battery and thermal load.', tags: ['Flutter', 'Dart', 'Google ML Kit', 'Computer Vision', 'Performance Optimization'], color: 'blue' },
+            { type: 'education', startYear: 2023, endYear: 2025, date: 'Sep 2023 - May 2025', title: 'Master of Science, Computer Engineering', company: 'New York University (NYU)', description: 'Relevant Coursework: Machine Learning, Internet Architecture Protocol, Data Structure and Algorithm, Real-time Embedded Systems, Computer Systems Architecture, Intro to Java, VLSI System Design, Advanced Topics of Computer Vision, Big Data, Database Management Systems.', tags: ['Tandon School of Engineering'], color: 'purple' },
+            { type: 'experience', startYear: 2024, endYear: 2024, date: 'Jun 2024 - Aug 2024', title: 'Software Development Intern', company: 'Dassault Systèmes', description: 'Engineered an offline NLP assistant to slash manual lookup times for engineers. Fine-tuned a BERT model for domain-specific search, achieving high accuracy and reliability within a constrained network.', tags: ['NLP', 'BERT', 'Software Architecture'], color: 'blue' },
+            { type: 'experience', startYear: 2021, endYear: 2023, date: 'January 2021 - August 2023', title: 'Software Engineer / Machine Learning Engineer', company: 'Scanpoint Geomatics Ltd', description: 'Automated ingestion and processing pipelines for massive geospatial datasets (40-60 GB/week). Trained and tuned YOLOv8 & U-Net models for crop detection and segmentation, delivering actionable map layers to over 500 field surveyors. Improved F1 score by 22% through custom data augmentation techniques.', tags: ['Machine Learning', 'Computer Vision', 'Data Pipelines', 'YOLOv8'], color: 'green' },
+            { type: 'education', startYear: 2019, endYear: 2023, date: '2019 - 2023', title: 'Bachelor of Technology, Information Technology', company: 'SRM Institute of Science & Technology (SRMIST)', description: 'Relevant Coursework: Object Oriented Design and Programming, Operating Systems, Software Engineering, AI. <br><br><strong>On-Campus Activity:</strong> As an <strong>Instructor for AI in Robotics</strong>, I led sessions for 200+ students on microcontroller programming (ESP32), sensors, and computer vision with Python/OpenCV, mentoring teams through hands-on builds.', tags: ['IT Department', 'Teaching', 'Mentorship'], color: 'purple' }
         ];
         
         const projects = [
-            { 
-                id: 'life-hud', 
-                tags: ['full-stack', 'backend'], 
-                title: 'LifeHUD: Persistent Desktop Productivity Engine', 
-                category: 'Desktop Software & Productivity', 
-                description: 'A native desktop application built with Electron and React that serves as a gamified personal OS, tracking KPIs like progress and hydration without browser context switching.', 
-                challenge: 'Developer context-switching friction between browsers and IDEs reduces focus. Most habit trackers are easily hidden behind other tabs.', 
-                mission: 'To engineer an "always-on" frameless dashboard that provides immediate visual feedback (heatmaps, progress bars) directly on the desktop using secure IPC and local state persistence.', 
-                tech: ['Electron', 'React.js', 'Node.js', 'Vite', 'TypeScript', 'Tailwind CSS'], 
-                outcome: [ 
-                    'Architected a secure IPC bridge separating Node.js and Web environments.', 
-                    'Engineered a timezone-safe GitHub-style contribution graph for habit tracking.', 
-                    'Implemented local JSON persistence allowing state to survive system reboots.', 
-                    'Optimized module resolution to solve ESM/CommonJS compatibility issues in the Electron Main process.' 
-                ], 
-                interactive: 'lifeHUD' 
-            },
+            { id: 'vantage', tags: ['data-eng', 'full-stack'], title: 'Vantage', category: 'Real-Time Geospatial Intelligence', description: 'A specialized geospatial application designed to solve the fragmentation problem in location scouting. Aggregates distinct use cases like golden hour photography, aviation tracking, and stargazing into a unified, interactive 3D map interface. Engineered a Polymorphic Data Structure to handle diverse metadata types (Airports vs. Sunset spots) within a single efficient rendering pipeline.', challenge: 'Handling disparate data types in a single high-performance map view.', mission: 'Build a decision-support engine with sub-100ms latency.', tech: ['React 18', 'Mapbox GL JS', 'Vite', 'Tailwind CSS', 'Lucide React'], outcome: ['Reduced code duplication by 40% using Polymorphic components.', 'Achieved sub-100ms rendering latency using useMemo.', 'Designed unified JSON schema for heterogeneous geospatial types.'], interactive: 'vantageRadar' },
+            { id: 'aura-cam', tags: ['ai-ml', 'full-stack'], title: 'AuraCam', category: 'Mobile Computer Vision', description: 'Real-time photography guidance app developed at IpserLab. Uses on-device ML to provide live framing and composition assistance.', challenge: 'Maintaining 60 FPS while running heavy CV inference on mobile.', mission: 'Optimize pipeline for thermal efficiency and accuracy.', tech: ['Flutter', 'Dart', 'Google ML Kit'], outcome: ['Stable 60 FPS performance.', 'Efficient battery usage via throttling.'], interactive: 'auraCamStats' },
             { id: 'trip-planner', tags: ['ai-ml', 'full-stack'], title: 'AI-Powered Trip Planner', category: 'Full-stack AI Application', description: 'A web app that uses AI to generate personalized travel itineraries based on user preferences.', challenge: 'Eliminate the tedious manual research involved in travel planning by creating an intelligent, conversational agent that builds custom trips on the fly.', mission: 'To develop a full-stack platform that leverages NLP to understand user needs (budget, interests, time) and generates complete, day-by-day travel itineraries with real-world context from Google Maps.', tech: ['Python', 'Flask', 'JavaScript', 'Gemini API', 'Google Maps API', 'MongoDB', 'HTML/CSS', 'Bootstrap'], outcome: [ 'Reduced average planning time by 2-3 hours per trip.', 'Achieved over 80% positive feedback in user testing for its "smart" suggestions.', 'Improved AI output quality by 40% through iterative prompt engineering.', 'Reduced API latency by up to 60% using background processing and caching.' ], interactive: 'tripPlanner' },
             { id: 'fetal-brain', tags: ['ai-ml'], title: 'Fetal Brain Anomaly Detection', category: 'Deep Learning & Medical Imaging', description: 'A CNN model to detect brain anomalies in 2D fetal ultrasound images, aiding early diagnosis.', challenge: 'The detection of fetal brain anomalies from ultrasounds is subjective and error-prone, especially in low-resource settings. The goal was to build a reliable AI decision support tool.', mission: 'To design, train, and evaluate a Convolutional Neural Network (CNN) that can accurately classify fetal brain ultrasounds as "Normal" or "Abnormal," and to make the model\'s decisions interpretable.', tech: ['Python', 'TensorFlow', 'Keras', 'OpenCV', 'Scikit-learn', 'Matplotlib'], outcome: [ 'Achieved ~91.3% test accuracy, outperforming baseline models by >15%.', 'Reached a 0.94 AUC score, indicating strong classification confidence.', 'Successfully used Grad-CAM heatmaps to visualize model focus, enhancing interpretability for medical use.', 'Overcame small dataset and class imbalance issues through data augmentation and class weighting.' ], interactive: 'fetalBrain' },
             { id: 'fraud-detection', tags: ['ai-ml', 'data-eng'], title: 'Credit Card Fraud Detection', category: 'Machine Learning & FinTech', description: 'An ML system to identify fraudulent transactions in a highly imbalanced dataset.', challenge: 'Fraudulent transactions are extremely rare events (less than 0.2% of data), making them difficult to detect accurately without a high number of false positives.', mission: 'To build and optimize a machine learning model (XGBoost) that maximizes fraud detection (Recall) while keeping false alarms (low False Positive Rate) to a minimum for real-world banking systems.', tech: ['Python', 'Pandas', 'Scikit-learn', 'XGBoost', 'LightGBM', 'Matplotlib'], outcome: [ 'Best model (XGBoost) achieved 95.2% Recall and 89.4% Precision.', 'Maintained a low False Positive Rate of under 2.3%.', 'Used SHAP and permutation importance for model explainability, identifying key fraud indicators.', 'Gained deep experience in handling highly imbalanced datasets and selecting appropriate evaluation metrics.' ], interactive: 'fraudDetection' },
@@ -380,50 +299,12 @@
             { id: 'hindi-lip-reading', tags: ['ai-ml'], title: 'Hindi Lip-Reading & VSR Model', category: 'Deep Learning & NLP Research', description: 'A pioneering project to create a Hindi lip-reading dataset and a Visual Speech Recognition model.', challenge: 'Visual Speech Recognition (VSR) is a major challenge for low-resource languages like Hindi due to the lack of large-scale, curated datasets and the ambiguity of lip movements (homophemes).', mission: 'To create a high-quality, 250+ hour Hindi lip-reading dataset from scratch and develop an end-to-end deep learning model (3D CNN + ResNet + Conformer) to perform visual transcription.', tech: ['Python', 'PyTorch', 'FFmpeg', 'SyncNet', 'ResNet-18', 'Conformer'], outcome: [ 'Successfully created a 250+ hour, multi-speaker Hindi VSR dataset.', 'Developed a fully automated preprocessing pipeline for video, audio, and text data.', 'Achieved a 71.4% Word Error Rate (WER), a promising result for an early-stage model in a low-resource language.', 'Gained full-stack AI research experience, from data creation to model implementation.' ] },
             { id: 'network-analyzer', tags: ['backend'], title: 'Network Traffic Analyzer', category: 'Networking & Cybersecurity', description: 'A Python-based tool to monitor, analyze, and visualize live network traffic for security and diagnostics.', challenge: 'Commercial network analysis tools can be complex and heavyweight. The goal was to create a lightweight, customizable, and easy-to-understand tool for real-time packet inspection.', mission: 'To build a system using Scapy and Pandas that could sniff live network packets, log them efficiently to SQLite, analyze them for anomalies (like port scans), and visualize traffic patterns.', tech: ['Python', 'Scapy', 'Pandas', 'Matplotlib', 'SQLite'], outcome: [ 'Successfully flagged simulated SYN floods and data exfiltration scenarios.', 'Achieved ~90% accuracy in identifying basic protocols against Wireshark benchmarks.', 'Gained deep knowledge of OSI layers, packet mechanics, and security threat signatures.', 'Designed an efficient schema for high-throughput packet logging and querying.' ] },
             { id: 'affirmation-library', tags: ['full-stack', 'backend', 'data-eng'], title: 'Public Affirmation Library', category: 'Full-stack Web App & Database Systems', description: 'A community-driven platform for sharing positive affirmations to promote mental well-being.', challenge: 'Creating a safe, positive, and robust digital space for emotional support requires careful backend engineering, secure text handling, and an empathetic user interface.', mission: 'To engineer a platform with a complex PostgreSQL backend (including stored procedures and triggers) and a TypeScript frontend, allowing users to submit, browse, and favorite affirmations securely and anonymously.', tech: ['Python', 'TypeScript', 'PostgreSQL', 'Docker', 'HTML/CSS', 'JavaScript'], outcome: [ 'System supported 1000+ concurrent interactions with minimal latency in tests.', 'Query optimization and connection pooling led to a 35% improvement in load time.', 'Gained hands-on experience with advanced PostgreSQL features like PL/pgSQL.', 'Learned about designing for emotional impact and empathy in technology.'], interactive: 'affirmationLibrary' },
-            { id: 'env-simulator', tags: ['data-eng'], title: 'Environmental Impact Simulator', category: 'Java Desktop Application & Data Visualization', description: 'A Java Swing application to quantify and visualize the ecological impact of everyday human activities.', challenge: 'Many people are unaware of the tangible environmental footprint of their daily choices. The goal was to create a tool to raise awareness through data-driven insights.', mission: 'To develop a user-focused desktop application that allows detailed tracking of activities like travel and energy use, providing interactive visualizations and actionable recommendations for sustainable behavior.', tech: ['Java', 'Swing'], outcome: [ 'Serves as an effective educational tool to show unseen environmental costs.', 'Encourages greener choices through data-backed behavioral nudging.', 'Mastered Java Swing, object-oriented design, and data visualization principles.', 'Gained a deeper understanding of sustainability through simulation modeling.'], interactive: 'envSimulator' }
+            { id: 'env-simulator', tags: [], title: 'Environmental Impact Simulator', category: 'Java Desktop Application & Data Visualization', description: 'A Java Swing application to quantify and visualize the ecological impact of everyday human activities.', challenge: 'Many people are unaware of the tangible environmental footprint of their daily choices. The goal was to create a tool to raise awareness through data-driven insights.', mission: 'To develop a user-focused desktop application that allows detailed tracking of activities like travel and energy use, providing interactive visualizations and actionable recommendations for sustainable behavior.', tech: ['Java', 'Swing'], outcome: [ 'Serves as an effective educational tool to show unseen environmental costs.', 'Encourages greener choices through data-backed behavioral nudging.', 'Mastered Java Swing, object-oriented design, and data visualization principles.', 'Gained a deeper understanding of sustainability through simulation modeling.'], interactive: 'envSimulator' }
         ];
 
-        const techLogos = { 
-            'Python': 'https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white', 
-            'Flask': 'https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white', 
-            'JavaScript': 'https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black', 
-            'Gemini API': 'https://img.shields.io/badge/Gemini_API-4285F4?style=for-the-badge&logo=google-gemini&logoColor=white', 
-            'Google Maps API': 'https://img.shields.io/badge/Google_Maps-4285F4?style=for-the-badge&logo=googlemaps&logoColor=white', 
-            'MongoDB': 'https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white', 
-            'HTML/CSS': 'https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white', 
-            'Bootstrap': 'https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white', 
-            'TensorFlow': 'https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white', 
-            'Keras': 'https://img.shields.io/badge/Keras-D00000?style=for-the-badge&logo=keras&logoColor=white', 
-            'OpenCV': 'https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white', 
-            'Scikit-learn': 'https://img.shields.io/badge/scikit_learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white', 
-            'Matplotlib': 'https://img.shields.io/badge/Matplotlib-11557c?style=for-the-badge&logo=matplotlib&logoColor=white', 
-            'Pandas': 'https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white', 
-            'XGBoost': 'https://img.shields.io/badge/XGBoost-006100?style=for-the-badge&logo=xgboost&logoColor=white', 
-            'LightGBM': 'https://img.shields.io/badge/LightGBM-444444?style=for-the-badge&logo=lightgbm&logoColor=white', 
-            'React.js': 'https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black', 
-            'PostgreSQL': 'https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white', 
-            'Docker': 'https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white', 
-            'Redis': 'https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white', 
-            'AWS': 'https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white', 
-            'Stripe API': 'https://img.shields.io/badge/Stripe-626CD9?style=for-the-badge&logo=stripe&logoColor=white', 
-            'PyTorch': 'https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white', 
-            'FFmpeg': 'https://img.shields.io/badge/FFmpeg-007800?style=for-the-badge&logo=ffmpeg&logoColor=white', 
-            'ResNet-18': 'https://img.shields.io/badge/ResNet--18-8A2BE2?style=for-the-badge&logo=resnet&logoColor=white', 
-            'Conformer': 'https://img.shields.io/badge/Conformer-4682B4?style=for-the-badge&logo=conformer&logoColor=white', 
-            'Scapy': 'https://img.shields.io/badge/Scapy-E05A17?style=for-the-badge&logo=scapy&logoColor=white', 
-            'SQLite': 'https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white', 
-            'Java': 'https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white', 
-            'Swing': 'https://img.shields.io/badge/Swing-557c9b?style=for-the-badge&logo=swing&logoColor=white', 
-            'TypeScript': 'https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white',
-            'Electron': 'https://img.shields.io/badge/Electron-2B2E3A?style=for-the-badge&logo=electron&logoColor=9FEAF9',
-            'Vite': 'https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white',
-            'Node.js': 'https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white',
-            'Flutter': 'https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white',
-            'Dart': 'https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white',
-            'Google ML Kit': 'https://img.shields.io/badge/ML_Kit-4285F4?style=for-the-badge&logo=google&logoColor=white'
-        };
+        const techLogos = { 'React 18': 'https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black', 'Flutter': 'https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white', 'Google ML Kit': 'https://img.shields.io/badge/ML_Kit-4285F4?style=for-the-badge&logo=google&logoColor=white', 'Mapbox GL JS': 'https://img.shields.io/badge/Mapbox-000000?style=for-the-badge&logo=mapbox&logoColor=white', 'Python': 'https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white', 'Flask': 'https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white', 'JavaScript': 'https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black', 'Gemini API': 'https://img.shields.io/badge/Gemini_API-4285F4?style=for-the-badge&logo=google-gemini&logoColor=white', 'Google Maps API': 'https://img.shields.io/badge/Google_Maps-4285F4?style=for-the-badge&logo=googlemaps&logoColor=white', 'MongoDB': 'https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white', 'HTML/CSS': 'https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white', 'Bootstrap': 'https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white', 'TensorFlow': 'https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white', 'Keras': 'https://img.shields.io/badge/Keras-D00000?style=for-the-badge&logo=keras&logoColor=white', 'OpenCV': 'https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white', 'Scikit-learn': 'https://img.shields.io/badge/scikit_learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white', 'Matplotlib': 'https://img.shields.io/badge/Matplotlib-11557c?style=for-the-badge&logo=matplotlib&logoColor=white', 'Pandas': 'https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white', 'XGBoost': 'https://img.shields.io/badge/XGBoost-006100?style=for-the-badge&logo=xgboost&logoColor=white', 'LightGBM': 'https://img.shields.io/badge/LightGBM-444444?style=for-the-badge&logo=lightgbm&logoColor=white', 'React.js': 'https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black', 'PostgreSQL': 'https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white', 'Docker': 'https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white', 'Redis': 'https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white', 'AWS': 'https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white', 'Stripe API': 'https://img.shields.io/badge/Stripe-626CD9?style=for-the-badge&logo=stripe&logoColor=white', 'PyTorch': 'https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white', 'FFmpeg': 'https://img.shields.io/badge/FFmpeg-007800?style=for-the-badge&logo=ffmpeg&logoColor=white', 'SyncNet': 'https://img.shields.io/badge/SyncNet-992244?style=for-the-badge&logo=syncnet&logoColor=white', 'ResNet-18': 'https://img.shields.io/badge/ResNet-18-000000?style=for-the-badge&logo=resnet&logoColor=white', 'Conformer': 'https://img.shields.io/badge/Conformer-000000?style=for-the-badge&logo=conformer&logoColor=white', 'Scapy': 'https://img.shields.io/badge/Scapy-000000?style=for-the-badge&logo=scapy&logoColor=white', 'SQLite': 'https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white', 'Java': 'https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white', 'Swing': 'https://img.shields.io/badge/Swing-000000?style=for-the-badge&logo=java&logoColor=white', 'TypeScript': 'https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white', 'Vite': 'https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white', 'Lucide React': 'https://img.shields.io/badge/Lucide-F05032?style=for-the-badge&logo=lucide&logoColor=white', 'Tailwind CSS': 'https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white', 'Dart': 'https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white' };
 
-        // --- Gemini API Integration ---
+        // --- Gemini API Integration (via Serverless Function) ---
         async function callGemini(prompt, retries = 3, delay = 1000) {
             if (!window.location.hostname.includes('netlify.app') && !window.location.hostname.includes('truptacharya.com')) {
                 return "Portfolio Co-Pilot is only available on the live website.";
@@ -520,17 +401,11 @@
         const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.1 });
         document.querySelectorAll('.scroll-animate').forEach(el => observer.observe(el));
 
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-        mobileMenu.addEventListener('click', (e) => { if (e.target.tagName === 'A') mobileMenu.classList.add('hidden'); });
-
         const copilotInput = document.getElementById('copilot-input');
         const copilotResponse = document.getElementById('copilot-response');
         
         const portfolioContext = `
-            About Me: I'm Trupt Acharya, an engineer building intelligent systems using ML, AI, and Full Stack Development.
-            Current Status: Working as a Software Engineer Intern at IpserLab LLC on the "AuraCam" mobile vision app.
+            About Me: I'm an engineer passionate about building intelligent systems, with a focus on Machine Learning, AI, and Full Stack Development. My journey has taken me from architecting scalable backend platforms to fine-tuning complex NLP models. I am actively seeking opportunities as a Software Engineer, ML/AI Engineer, or Data Engineer where I can apply my skills to transform complex data into actionable insights and create meaningful, real-world solutions.
             Education & Experience:
             ${timelineItems.map(item => `- ${item.title} at ${item.company} (${item.date}): ${item.description.replace(/<br><br><strong>.*?<\/strong>.*|<[^>]*>/g, ' ')}`).join('\n')}
             Projects:
@@ -541,13 +416,13 @@
             if (e.key === 'Enter' && e.target.value) {
                 const query = e.target.value;
                 showLoader(copilotResponse);
-                const prompt = `You are a helpful portfolio assistant for Trupt Acharya. Based on the following context, answer the user's question concisely. If they ask about your work at IpserLab, explain that you are building AuraCam using Flutter and ML Kit.\n\nContext:\n${portfolioContext}\n\nUser Question: "${query}"\n\nAnswer:`;
+                const prompt = `You are a helpful portfolio assistant for Trupt Acharya. Based on the following context, answer the user's question concisely and conversationally.\n\nContext:\n${portfolioContext}\n\nUser Question: "${query}"\n\nAnswer:`;
                 const responseText = await callGemini(prompt);
                 copilotResponse.innerHTML = responseText.replace(/\n/g, '<br>');
             }
         });
 
-        // --- Render Timeline ---
+        // --- Render Two-Sided Timeline with Spanning Boxes & Hover Effect ---
         const timelineContainer = document.getElementById('timeline-container');
         const startYear = 2019;
         const endYear = 2026;
@@ -645,8 +520,8 @@
             document.getElementById('explain-project-btn').addEventListener('click', async function() {
                 const explanationDiv = document.getElementById('project-explanation');
                 showLoader(explanationDiv);
-                const projectContext = `Project Title: ${project.title}. Challenge: ${project.challenge}. Mission: ${project.mission}. Tech Used: ${project.tech.join(', ')}. Outcome: ${project.outcome.join('. ')}.`;
-                const prompt = `You are a helpful portfolio assistant for Trupt Acharya. Explain the following project in simple, easy-to-understand terms for a hiring manager. Keep it to 2-3 sentences.\n\nProject Details:\n${projectContext}\n\nExplanation:`;
+                const projectContext = `Project Title: ${project.title}. Challenge: ${project.challenge}. Mission: ${project.mission}. Tech Used: ${project.tech.join(', ')}.`;
+                const prompt = `You are a helpful portfolio assistant. Explain the following project in simple, easy-to-understand terms for a non-technical audience. Keep it to 2-3 sentences.\n\nProject Details:\n${projectContext}\n\nExplanation:`;
                 const explanation = await callGemini(prompt);
                 explanationDiv.innerHTML = explanation.replace(/\n/g, '<br>');
             });
@@ -659,27 +534,12 @@
         async function loadInteractiveElement(container, type) {
             container.innerHTML = '';
             switch (type) {
-                case 'lifeHUD':
-                    container.innerHTML = `
-                        <h5 class="font-bold text-white text-center mb-4">Live Demo: LifeHUD Dashboard Simulator</h5>
-                        <div class="grid grid-cols-2 gap-4 max-w-md mx-auto">
-                            <div class="bg-slate-800 p-4 rounded-lg border border-slate-700 text-center">
-                                <p class="text-xs text-blue-400 font-bold uppercase">Hydration</p>
-                                <div class="w-full bg-slate-700 h-2 rounded-full mt-2">
-                                    <div id="water-bar" class="bg-blue-500 h-2 rounded-full transition-all duration-500" style="width: 40%"></div>
-                                </div>
-                                <button onclick="const b = document.getElementById('water-bar'); b.style.width = Math.min(100, parseInt(b.style.width)+20)+'%'" class="mt-3 text-[10px] bg-blue-600 px-2 py-1 rounded">Drink Water</button>
-                            </div>
-                            <div class="bg-slate-800 p-4 rounded-lg border border-slate-700 text-center">
-                                <p class="text-xs text-green-400 font-bold uppercase">LeetCode Streak</p>
-                                <div class="flex justify-center gap-1 mt-2">
-                                    ${Array(7).fill(0).map((_,i) => `<div class="${i < 4 ? 'bg-green-500' : 'bg-slate-700'} w-3 h-3 rounded-sm"></div>`).join('')}
-                                </div>
-                                <p class="text-lg font-bold mt-1 text-white">4 Days</p>
-                            </div>
-                        </div>
-                        <p class="text-center text-[10px] text-slate-500 mt-4 italic">LifeHUD runs as a native frameless app on your desktop background.</p>
-                    `;
+                case 'vantageRadar':
+                    container.innerHTML = `<div class="flex flex-col items-center gap-6"><div class="relative w-40 h-40 border-2 border-blue-500/20 rounded-full flex items-center justify-center bg-blue-900/10 shadow-lg shadow-blue-500/10"><div class="radar-line absolute inset-0 border-r-2 border-blue-500/60 shadow-[2px_0_10px_rgba(59,130,246,0.5)]"></div><div id="rt" class="text-5xl drop-shadow-2xl">✈️</div></div><div class="flex gap-3"><button data-t="Aviation" class="v-btn bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg text-xs font-bold transition-all shadow-lg active:scale-95">Aviation</button><button data-t="Astronomy" class="v-btn bg-purple-600 hover:bg-purple-500 px-4 py-2 rounded-lg text-xs font-bold transition-all shadow-lg active:scale-95">Astronomy</button><button data-t="Sunset" class="v-btn bg-orange-600 hover:bg-orange-500 px-4 py-2 rounded-lg text-xs font-bold transition-all shadow-lg active:scale-95">Golden Hour</button></div><div id="vd" class="font-mono text-xs text-blue-300 p-4 bg-black/60 rounded-xl w-full border border-blue-500/30 leading-loose shadow-inner">SYSTEM STATUS: READY<br>TYPE: AVIATION<br>RUNWAY: 22R/04L<br>ACTIVE: 118.7 MHz</div></div>`;
+                    container.onclick = (e) => { const b = e.target.closest('.v-btn'); if (!b) return; const t = b.dataset.t; document.getElementById('rt').innerText = t === 'Aviation' ? '✈️' : t === 'Astronomy' ? '✨' : '📸'; document.getElementById('vd').innerHTML = t === 'Aviation' ? 'STATUS: TRACKING<br>TYPE: AVIATION<br>RUNWAY: 22R' : t === 'Astronomy' ? 'STATUS: SCANNING<br>TYPE: ASTRONOMY<br>BORTLE: Class 2' : 'STATUS: CALCULATING<br>TYPE: SUNSET<br>AZIMUTH: 242.1°'; };
+                    break;
+                case 'auraCamStats':
+                    container.innerHTML = `<div class="text-center font-mono max-w-md mx-auto"><p class="text-blue-400 mb-6 font-black tracking-widest text-xs uppercase">AuraCam Engine Telemetry</p><div class="grid grid-cols-2 gap-6"><div class="bg-slate-800/40 p-5 rounded-2xl border border-blue-500/20 shadow-inner">UI STABILITY: <span class="text-green-400">60 FPS</span></div><div class="bg-slate-800/40 p-5 rounded-2xl border border-blue-500/20 shadow-inner">INFERENCE: <span class="text-green-400">12ms</span></div></div><div class="mt-6 text-[10px] text-slate-500 tracking-[0.3em] animate-pulse uppercase">✓ CROSS-PLATFORM PIPELINE VERIFIED (Flutter/ML Kit)</div></div>`;
                     break;
                 case 'tripPlanner':
                     container.innerHTML = `<h5 class="font-bold text-white text-center mb-4">Live Demo: AI Trip Planner</h5><div class="space-y-4 max-w-md mx-auto"><div><label for="trip-city" class="text-sm text-slate-300">Destination</label><input id="trip-city" type="text" class="w-full mt-1 px-3 py-2 rounded-md bg-slate-800 border border-slate-600 focus:outline-none focus:ring-1 focus:ring-blue-500" value="Paris"></div><button id="suggest-activities-btn" class="w-full bg-teal-600/80 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-md transition-colors flex items-center justify-center gap-2">✨ Suggest Activities with Gemini</button></div><div id="trip-output" class="mt-4 p-4 bg-slate-800 rounded-md text-slate-300 hidden"></div>`;
@@ -687,29 +547,32 @@
                         const city = document.getElementById('trip-city').value || 'Paris';
                         const outputDiv = document.getElementById('trip-output');
                         showLoader(outputDiv);
-                        const prompt = `You are a creative travel assistant. Suggest 3 unique activities for ${city}. Format as a list.`;
+                        const prompt = `You are a creative travel assistant. Suggest 3 unique and interesting activities for a tourist visiting ${city}. Provide a short, one-sentence description for each. Format the output as a simple list.`;
                         const suggestions = await callGemini(prompt);
                         outputDiv.innerHTML = suggestions.replace(/\n/g, '<br>');
                     });
                     break;
                 case 'fetalBrain':
-                    container.innerHTML = `<h5 class="font-bold text-white text-center mb-4">Interactive Demo: Explainable AI (XAI)</h5> <p class="text-center text-sm text-slate-400 mb-4">Drag slider to see Grad-CAM heatmap.</p> <div class="relative max-w-sm mx-auto aspect-square"> <img src="https://placehold.co/400x400/000000/FFFFFF?text=Fetal+Ultrasound" class="absolute inset-0 w-full h-full object-cover rounded-md"> <div id="heatmap-overlay" class="absolute inset-0 w-1/2 h-full overflow-hidden"> <img src="https://placehold.co/800x400/FF0000/FFFFFF?text=Heatmap" style="width: 200%; height: 100%; max-width: 200%;" class="object-cover rounded-md"> </div> <input type="range" min="0" max="100" value="50" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" oninput="document.getElementById('heatmap-overlay').style.width = this.value + '%'"> </div>`;
+                    container.innerHTML = `<h5 class="font-bold text-white text-center mb-4">Interactive Demo: Explainable AI (XAI)</h5> <p class="text-center text-sm text-slate-400 mb-4">Drag the slider to reveal where the AI model is "looking" using a Grad-CAM heatmap.</p> <div class="relative max-w-sm mx-auto aspect-square"> <img src="https://placehold.co/400x400/000000/FFFFFF?text=Fetal+Ultrasound" class="absolute inset-0 w-full h-full object-cover rounded-md" alt="Fetal Ultrasound"> <div id="heatmap-overlay" class="absolute inset-0 w-1/2 h-full overflow-hidden"> <img src="https://placehold.co/800x400/FF0000/FFFFFF?text=Heatmap" style="width: 200%; height: 100%; max-width: 200%;" class="object-cover rounded-md" alt="Grad-CAM Heatmap"> </div> <input type="range" min="0" max="100" value="50" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" oninput="document.getElementById('heatmap-overlay').style.width = this.value + '%'"> </div>`;
                     break;
                 case 'fraudDetection':
-                    container.innerHTML = `<h5 class="font-bold text-white text-center mb-4">Interactive Demo: Precision vs. Recall</h5> <div class="max-w-lg mx-auto"> <canvas id="fraudChart"></canvas> <div class="mt-4"> <label for="threshold-slider" class="text-sm text-slate-300">Detection Threshold: <span id="threshold-value" class="font-bold text-white">0.5</span></label> <input id="threshold-slider" type="range" min="0.1" max="0.9" value="0.5" step="0.01" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer"> </div> </div>`;
-                    const fctx = document.getElementById('fraudChart').getContext('2d');
-                    const fraudChart = new Chart(fctx, { type: 'bar', data: { labels: ['Precision', 'Recall'], datasets: [{ data: [89.4, 95.2], backgroundColor: ['rgba(59, 130, 246, 0.5)', 'rgba(22, 163, 74, 0.5)'] }] }, options: { scales: { y: { beginAtZero: true, max: 100 } }, plugins: { legend: { display: false } } } });
-                    document.getElementById('threshold-slider').addEventListener('input', (e) => { const threshold = parseFloat(e.target.value); document.getElementById('threshold-value').textContent = threshold.toFixed(2); fraudChart.data.datasets[0].data = [20 + (threshold * 90), 110 - (threshold * 80)]; fraudChart.update(); });
+                    container.innerHTML = `<h5 class="font-bold text-white text-center mb-4">Interactive Demo: Precision vs. Recall</h5> <p class="text-center text-sm text-slate-400 mb-4">Adjust the model's detection threshold to see its effect on performance metrics.</p> <div class="max-w-lg mx-auto"> <canvas id="fraudChart"></canvas> <div class="mt-4"> <label for="threshold-slider" class="text-sm text-slate-300">Detection Threshold: <span id="threshold-value" class="font-bold text-white">0.5</span></label> <input id="threshold-slider" type="range" min="0.1" max="0.9" value="0.5" step="0.01" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer"> </div> </div>`;
+                    const ctx = document.getElementById('fraudChart').getContext('2d');
+                    const fraudChart = new Chart(ctx, { type: 'bar', data: { labels: ['Precision (Correct Alerts)', 'Recall (Frauds Caught)'], datasets: [{ label: 'Model Performance', data: [89.4, 95.2], backgroundColor: ['rgba(59, 130, 246, 0.5)', 'rgba(22, 163, 74, 0.5)'], borderColor: ['rgba(59, 130, 246, 1)', 'rgba(22, 163, 74, 1)'], borderWidth: 1 }] }, options: { scales: { y: { beginAtZero: true, max: 100, ticks: { color: '#94a3b8' } }, x: { ticks: { color: '#94a3b8' } } }, plugins: { legend: { display: false } } } });
+                    document.getElementById('threshold-slider').addEventListener('input', (e) => { const threshold = parseFloat(e.target.value); document.getElementById('threshold-value').textContent = threshold.toFixed(2); const precision = 20 + (threshold * 90); const recall = 110 - (threshold * 80); fraudChart.data.datasets[0].data = [precision, recall]; fraudChart.update(); });
                     break;
                 case 'ecommerce':
-                     container.innerHTML = `<h5 class="font-bold text-white text-center mb-4">Architecture: Scalable Cloud Deployment</h5> <div class="bg-slate-800 p-4 rounded-md border border-slate-700 text-center font-mono text-[10px]"> <p class="text-green-400">[User]</p> <p>|</p> <p>V</p> <div class="p-2 border border-dashed border-slate-600 rounded-md"> <p class="text-yellow-400">[AWS EC2 (Nginx)]</p> <p>|</p> <p>[Docker: React] <-> [Docker: Flask] -- [PostgreSQL]</p> </div> </div>`;
+                     container.innerHTML = `<h5 class="font-bold text-white text-center mb-4">Architecture: Scalable Cloud Deployment</h5> <p class="text-center text-sm text-slate-400 mb-4">This diagram illustrates the cloud-native architecture designed for performance and reliability.</p> <div class="bg-slate-800 p-4 rounded-md border border-slate-700 text-center font-mono text-sm"> <p class="text-green-400">[User via Browser]</p> <p class="text-slate-400">|</p> <p class="text-slate-400">V</p> <div class="p-2 border border-dashed border-slate-600 rounded-md"> <p class="text-yellow-400">[AWS Cloud]</p> <p class="text-slate-400">| --> [Nginx Reverse Proxy on EC2]</p> <p class="text-slate-400">|           |</p> <p class="text-slate-400">+-- [React Frontend (Docker)] &lt;--&gt; [Flask Backend API (Docker)] --+-- [Stripe API]</p> <p class="text-slate-400">                                       |                    |</p> <p class="text-slate-400">                                       +-- [Redis (Cache)]    +-- [PostgreSQL (DB)]</p> </div> <p class="text-slate-400 mt-2">Static Assets (Images) served from [AWS S3]</p> </div>`;
                      break;
                 case 'affirmationLibrary':
-                    container.innerHTML = `<h5 class="font-bold text-white text-center mb-4">Live Demo: Affirmation Library</h5> <div class="max-w-lg mx-auto"> <div id="aff-list" class="space-y-2 mb-4 h-16 overflow-y-auto p-2 bg-slate-800 rounded-md text-xs"> <p>You are capable of amazing things.</p> </div> <div class="flex gap-2"> <input id="aff-input" type="text" class="flex-grow px-3 py-1 rounded bg-slate-800 border border-slate-600 text-xs" placeholder="Share..."> <button onclick="const i=document.getElementById('aff-input'); const l=document.getElementById('aff-list'); if(i.value){l.innerHTML += '<p>'+i.value+'</p>'; i.value=''; l.scrollTop=l.scrollHeight;}" class="bg-blue-600 px-3 py-1 rounded text-xs">Share</button> </div> </div>`;
+                    container.innerHTML = `<h5 class="font-bold text-white text-center mb-4">Live Demo: Public Affirmation Library</h5> <div class="max-w-lg mx-auto"> <div id="affirmations-list" class="space-y-2 mb-4 h-24 overflow-y-auto p-2 bg-slate-800 rounded-md"> <p class="text-slate-300 p-2 rounded-md bg-slate-700/50">You are capable of amazing things.</p> </div> <div class="flex gap-2"> <input id="affirmation-input" type="text" class="flex-grow px-3 py-2 rounded-md bg-slate-800 border border-slate-600 focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Share a positive message..."> <button id="submit-affirmation" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition-colors">Share</button> </div> </div>`;
+                    document.getElementById('submit-affirmation').addEventListener('click', () => { const input = document.getElementById('affirmation-input'); const list = document.getElementById('affirmations-list'); if (input.value.trim()) { const newAffirmation = document.createElement('p'); newAffirmation.className = 'text-slate-300 p-2 rounded-md bg-slate-700/50 animate-pulse'; newAffirmation.textContent = input.value; list.appendChild(newAffirmation); list.scrollTop = list.scrollHeight; input.value = ''; setTimeout(() => newAffirmation.classList.remove('animate-pulse'), 500); } });
                     break;
                 case 'envSimulator':
-                    container.innerHTML = `<h5 class="font-bold text-white text-center mb-4">Interactive Demo: Environmental Impact</h5> <canvas id="envChart"></canvas> <div class="mt-4 flex gap-2 justify-center"> <button onclick="const c=Chart.getChart('envChart'); c.data.datasets[0].data[0]+=20; c.update();" class="bg-red-600/50 px-2 py-1 rounded text-[10px]">Add Car Trip</button> <button onclick="const c=Chart.getChart('envChart'); c.data.datasets[0].data[1]+=50; c.update();" class="bg-yellow-600/50 px-2 py-1 rounded text-[10px]">Add Energy</button> </div>`;
-                    new Chart(document.getElementById('envChart').getContext('2d'), { type: 'bar', data: { labels: ['Carbon', 'Energy'], datasets: [{ data: [0, 0], backgroundColor: ['rgba(220, 38, 38, 0.5)', 'rgba(234, 179, 8, 0.5)'] }] }, options: { indexAxis: 'y', plugins: { legend: { display: false } } } });
+                    container.innerHTML = `<h5 class="font-bold text-white text-center mb-4">Interactive Demo: Environmental Impact</h5> <p class="text-center text-sm text-slate-400 mb-4">Add activities to see their cumulative impact on the environment.</p> <div class="max-w-lg mx-auto"> <canvas id="envChart"></canvas> <div class="mt-4 flex flex-wrap gap-2 justify-center"> <button data-activity="car" class="bg-red-600/50 hover:bg-red-600 text-white text-sm font-bold py-1 px-3 rounded-md transition-colors">Add Car Trip</button> <button data-activity="energy" class="bg-yellow-600/50 hover:bg-yellow-600 text-white text-sm font-bold py-1 px-3 rounded-md transition-colors">Add Energy Use</button> <button data-activity="water" class="bg-cyan-600/50 hover:bg-cyan-600 text-white text-sm font-bold py-1 px-3 rounded-md transition-colors">Add Water Use</button> </div> </div>`;
+                    const envCtx = document.getElementById('envChart').getContext('2d');
+                    const envChart = new Chart(envCtx, { type: 'bar', data: { labels: ['Carbon (kg)', 'Energy (kWh)', 'Water (L)'], datasets: [{ label: 'Total Impact', data: [0, 0, 0], backgroundColor: ['rgba(220, 38, 38, 0.5)', 'rgba(234, 179, 8, 0.5)', 'rgba(6, 182, 212, 0.5)'], borderColor: ['rgba(220, 38, 38, 1)', 'rgba(234, 179, 8, 1)', 'rgba(6, 182, 212, 1)'], borderWidth: 1 }] }, options: { indexAxis: 'y', scales: { x: { beginAtZero: true, ticks: { color: '#94a3b8' } }, y: { ticks: { color: '#94a3b8' } } }, plugins: { legend: { display: false } } } });
+                    container.querySelector('.justify-center').addEventListener('click', (e) => { if(e.target.dataset.activity) { const activity = e.target.dataset.activity; if (activity === 'car') envChart.data.datasets[0].data[0] += 20; if (activity === 'energy') envChart.data.datasets[0].data[1] += 50; if (activity === 'water') envChart.data.datasets[0].data[2] += 100; envChart.update(); } });
                     break;
             }
         }
