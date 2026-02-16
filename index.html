@@ -45,6 +45,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
+        /* Two-Sided Timeline Styles */
         #timeline-container {
             position: relative;
             max-width: 56rem;
@@ -109,6 +110,20 @@
         .detail-view::-webkit-scrollbar-track { background: transparent; }
         .detail-view::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
         .detail-view::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+        @media (max-width: 768px) {
+            #timeline-container::after {
+                left: 20px;
+            }
+            .timeline-year {
+                left: 20px;
+            }
+            .timeline-entry {
+                width: calc(100% - 50px);
+                left: 50px !important;
+                margin-bottom: 2rem;
+            }
+        }
 
         .modal-content {
             animation: slide-up 0.3s ease-out;
@@ -208,7 +223,7 @@
                 <div class="mt-8 max-w-2xl mx-auto">
                     <label for="copilot-input" class="block text-sm font-medium text-slate-300 mb-2">✨ Ask my Portfolio Co-Pilot</label>
                     <div class="relative">
-                        <input type="text" id="copilot-input" class="copilot-input w-full px-4 py-3 rounded-lg bg-slate-800 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" placeholder="e.g., 'Explain your work with AI' or 'Summarize your experience'">
+                        <input type="text" id="copilot-input" class="copilot-input w-full px-4 py-3 rounded-lg bg-slate-800 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" placeholder="e.g., 'What are you working on at IpserLab?'">
                         <div id="copilot-response" class="mt-4 text-left text-slate-300 bg-slate-800/50 p-4 rounded-lg border border-slate-700 hidden"></div>
                     </div>
                 </div>
@@ -283,15 +298,65 @@
     document.addEventListener('DOMContentLoaded', function() {
         // --- Data ---
         const timelineItems = [
-            { type: 'education', startYear: 2023, endYear: 2025, date: 'Sep 2023 - May 2025', title: 'Master of Science, Computer Engineering', company: 'New York University (NYU)', description: 'Relevant Coursework: Machine Learning, Internet Architecture Protocol, Data Structure and Algorithm, Real-time Embedded Systems, Computer Systems Architecture, Intro to Java, VLSI System Design, Advanced Topics of Computer Vision, Big Data, Database Management Systems.', tags: ['Tandon School of Engineering'], color: 'purple' },
-            { type: 'experience', startYear: 2024, endYear: 2024, date: 'Jun 2024 - Aug 2024', title: 'Software Development Intern', company: 'Dassault Systèmes', description: 'Engineered an offline NLP assistant to slash manual lookup times for engineers. Fine-tuned a BERT model for domain-specific search, achieving high accuracy and reliability within a constrained network.', tags: ['~90% Accuracy', '-40% Lookup Time', '+35% Test Coverage'], color: 'blue' },
-            { type: 'experience', startYear: 2021, endYear: 2023, date: 'Dec 2021 - Aug 2023', title: 'Machine Learning Intern', company: 'Scanpoint Geomatics Ltd', description: 'Automated ingestion and processing pipelines for massive geospatial datasets (40-60 GB/week). Trained and tuned YOLOv8 & U-Net models for crop detection and segmentation, delivering actionable map layers to over 500 field surveyors.', tags: ['+22% F1 Score', '-30% Failed Runs', '500+ Users'], color: 'green' },
-            { type: 'experience', startYear: 2021, endYear: 2021, date: 'Jul 2021 - Dec 2021', title: 'Software Development Engineer Intern', company: 'Cmarix Technolabs Pvt Ltd', description: 'Improved frontend performance and maintainability for client web apps. Refactored 5k+ lines of code, introduced lazy loading and code-splitting, and standardized UI components to reduce bugs and improve user experience.', tags: ['-18% Bundle Size', '+25% FCP', '-30% UI Issues'], color: 'purple' },
-            { type: 'education', startYear: 2019, endYear: 2023, date: '2019 - 2023', title: 'Bachelor of Technology, Information Technology', company: 'SRM Institute of Science & Technology (SRMIST)', description: 'Relevant Coursework: Object Oriented Design and Programming, Operating Systems, Software Engineering, AI. <br><br><strong>On-Campus Activity:</strong> As an <strong>Instructor for AI in Robotics</strong>, I led sessions for 200+ students on microcontroller programming (ESP32), sensors, and computer vision with Python/OpenCV, mentoring teams through hands-on builds.', tags: ['IT Department', 'Teaching', 'Mentorship'], color: 'purple' }
+            { 
+                type: 'experience', 
+                startYear: 2025, 
+                endYear: 2026, 
+                date: 'September 2025 - Present', 
+                title: 'Software Engineer Intern (Full-Time)', 
+                company: 'IpserLab Startup, LLC', 
+                description: 'Developing "AuraCam", a mobile application providing real-time computer vision guidance for photo composition. Engineered a high-performance CV pipeline using Flutter and Dart. Optimized UI rendering to 60 FPS while handling heavy on-device inference using Google ML Kit. Implemented advanced frame throttling and concurrency controls to manage device battery and thermal load.', 
+                tags: ['Flutter', 'Dart', 'Google ML Kit', 'Computer Vision', 'Performance Optimization'], 
+                color: 'blue' 
+            },
+            { 
+                type: 'education', 
+                startYear: 2023, 
+                endYear: 2025, 
+                date: 'Sep 2023 - May 2025', 
+                title: 'Master of Science, Computer Engineering', 
+                company: 'New York University (NYU)', 
+                description: 'Relevant Coursework: Machine Learning, Internet Architecture Protocol, Data Structure and Algorithm, Real-time Embedded Systems, Computer Systems Architecture, Intro to Java, VLSI System Design, Advanced Topics of Computer Vision, Big Data, Database Management Systems.', 
+                tags: ['Tandon School of Engineering'], 
+                color: 'purple' 
+            },
+            { 
+                type: 'experience', 
+                startYear: 2024, 
+                endYear: 2024, 
+                date: 'Jun 2024 - Aug 2024', 
+                title: 'Software Development Intern', 
+                company: 'Dassault Systèmes', 
+                description: 'Engineered an offline NLP assistant to slash manual lookup times for engineers. Fine-tuned a BERT model for domain-specific search, achieving high accuracy and reliability within a constrained network.', 
+                tags: ['NLP', 'BERT', 'Software Architecture'], 
+                color: 'blue' 
+            },
+            { 
+                type: 'experience', 
+                startYear: 2021, 
+                endYear: 2023, 
+                date: 'January 2021 - August 2023', 
+                title: 'Software Engineer / Machine Learning Engineer', 
+                company: 'Scanpoint Geomatics Ltd', 
+                description: 'Automated ingestion and processing pipelines for massive geospatial datasets (40-60 GB/week). Trained and tuned YOLOv8 & U-Net models for crop detection and segmentation, delivering actionable map layers to over 500 field surveyors. Improved F1 score by 22% through custom data augmentation techniques.', 
+                tags: ['Machine Learning', 'Computer Vision', 'Data Pipelines', 'YOLOv8'], 
+                color: 'green' 
+            },
+            { 
+                type: 'education', 
+                startYear: 2019, 
+                endYear: 2023, 
+                date: '2019 - 2023', 
+                title: 'Bachelor of Technology, Information Technology', 
+                company: 'SRM Institute of Science & Technology (SRMIST)', 
+                description: 'Relevant Coursework: Object Oriented Design and Programming, Operating Systems, Software Engineering, AI. <br><br><strong>On-Campus Activity:</strong> As an <strong>Instructor for AI in Robotics</strong>, I led sessions for 200+ students on microcontroller programming (ESP32), sensors, and computer vision with Python/OpenCV.', 
+                tags: ['SRMIST', 'Teaching', 'AI in Robotics'], 
+                color: 'purple' 
+            }
         ];
         
         const projects = [ { id: 'trip-planner', tags: ['ai-ml', 'full-stack'], title: 'AI-Powered Trip Planner', category: 'Full-stack AI Application', description: 'A web app that uses AI to generate personalized travel itineraries based on user preferences.', challenge: 'Eliminate the tedious manual research involved in travel planning by creating an intelligent, conversational agent that builds custom trips on the fly.', mission: 'To develop a full-stack platform that leverages NLP to understand user needs (budget, interests, time) and generates complete, day-by-day travel itineraries with real-world context from Google Maps.', tech: ['Python', 'Flask', 'JavaScript', 'Gemini API', 'Google Maps API', 'MongoDB', 'HTML/CSS', 'Bootstrap'], outcome: [ 'Reduced average planning time by 2-3 hours per trip.', 'Achieved over 80% positive feedback in user testing for its "smart" suggestions.', 'Improved AI output quality by 40% through iterative prompt engineering.', 'Reduced API latency by up to 60% using background processing and caching.' ], interactive: 'tripPlanner' }, { id: 'fetal-brain', tags: ['ai-ml'], title: 'Fetal Brain Anomaly Detection', category: 'Deep Learning & Medical Imaging', description: 'A CNN model to detect brain anomalies in 2D fetal ultrasound images, aiding early diagnosis.', challenge: 'The detection of fetal brain anomalies from ultrasounds is subjective and error-prone, especially in low-resource settings. The goal was to build a reliable AI decision support tool.', mission: 'To design, train, and evaluate a Convolutional Neural Network (CNN) that can accurately classify fetal brain ultrasounds as "Normal" or "Abnormal," and to make the model\'s decisions interpretable.', tech: ['Python', 'TensorFlow', 'Keras', 'OpenCV', 'Scikit-learn', 'Matplotlib'], outcome: [ 'Achieved ~91.3% test accuracy, outperforming baseline models by >15%.', 'Reached a 0.94 AUC score, indicating strong classification confidence.', 'Successfully used Grad-CAM heatmaps to visualize model focus, enhancing interpretability for medical use.', 'Overcame small dataset and class imbalance issues through data augmentation and class weighting.' ], interactive: 'fetalBrain' }, { id: 'fraud-detection', tags: ['ai-ml', 'data-eng'], title: 'Credit Card Fraud Detection', category: 'Machine Learning & FinTech', description: 'An ML system to identify fraudulent transactions in a highly imbalanced dataset.', challenge: 'Fraudulent transactions are extremely rare events (less than 0.2% of data), making them difficult to detect accurately without a high number of false positives.', mission: 'To build and optimize a machine learning model (XGBoost) that maximizes fraud detection (Recall) while keeping false alarms (low False Positive Rate) to a minimum for real-world banking systems.', tech: ['Python', 'Pandas', 'Scikit-learn', 'XGBoost', 'LightGBM', 'Matplotlib'], outcome: [ 'Best model (XGBoost) achieved 95.2% Recall and 89.4% Precision.', 'Maintained a low False Positive Rate of under 2.3%.', 'Used SHAP and permutation importance for model explainability, identifying key fraud indicators.', 'Gained deep experience in handling highly imbalanced datasets and selecting appropriate evaluation metrics.' ], interactive: 'fraudDetection' }, { id: 'ecommerce-platform', tags: ['full-stack', 'backend'], title: 'Scalable E-Commerce Platform', category: 'Full Stack & Cloud DevOps', description: 'A production-ready e-commerce system designed for high traffic, security, and performance.', challenge: 'Building an e-commerce platform that goes beyond basic functionality to handle high concurrency, secure payments, and maintain performance at scale.', mission: 'To architect and deploy a modular, containerized e-commerce application using a modern tech stack (React, Flask, Docker, AWS) with a focus on scalability, reliability, and best practices in DevOps.', tech: ['Python', 'Flask', 'React.js', 'PostgreSQL', 'Docker', 'Redis', 'AWS', 'Stripe API'], outcome: [ 'Improved page load time by 42% by implementing Redis caching.', 'Handled 500 concurrent users in load tests with stable performance.', 'Implemented a CI/CD pipeline with GitHub Actions, reducing deployment friction.', 'Gained hands-on experience with cloud-native deployments, containerization, and microservice principles.' ], interactive: 'ecommerce' }, { id: 'hindi-lip-reading', tags: ['ai-ml'], title: 'Hindi Lip-Reading & VSR Model', category: 'Deep Learning & NLP Research', description: 'A pioneering project to create a Hindi lip-reading dataset and a Visual Speech Recognition model.', challenge: 'Visual Speech Recognition (VSR) is a major challenge for low-resource languages like Hindi due to the lack of large-scale, curated datasets and the ambiguity of lip movements (homophemes).', mission: 'To create a high-quality, 250+ hour Hindi lip-reading dataset from scratch and develop an end-to-end deep learning model (3D CNN + ResNet + Conformer) to perform visual transcription.', tech: ['Python', 'PyTorch', 'FFmpeg', 'SyncNet', 'ResNet-18', 'Conformer'], outcome: [ 'Successfully created a 250+ hour, multi-speaker Hindi VSR dataset.', 'Developed a fully automated preprocessing pipeline for video, audio, and text data.', 'Achieved a 71.4% Word Error Rate (WER), a promising result for an early-stage model in a low-resource language.', 'Gained full-stack AI research experience, from data creation to model implementation.' ] }, { id: 'network-analyzer', tags: ['backend'], title: 'Network Traffic Analyzer', category: 'Networking & Cybersecurity', description: 'A Python-based tool to monitor, analyze, and visualize live network traffic for security and diagnostics.', challenge: 'Commercial network analysis tools can be complex and heavyweight. The goal was to create a lightweight, customizable, and easy-to-understand tool for real-time packet inspection.', mission: 'To build a system using Scapy and Pandas that could sniff live network packets, log them efficiently to SQLite, analyze them for anomalies (like port scans), and visualize traffic patterns.', tech: ['Python', 'Scapy', 'Pandas', 'Matplotlib', 'SQLite'], outcome: [ 'Successfully flagged simulated SYN floods and data exfiltration scenarios.', 'Achieved ~90% accuracy in identifying basic protocols against Wireshark benchmarks.', 'Gained deep knowledge of OSI layers, packet mechanics, and security threat signatures.', 'Designed an efficient schema for high-throughput packet logging and querying.' ] }, { id: 'affirmation-library', tags: ['full-stack', 'backend', 'data-eng'], title: 'Public Affirmation Library', category: 'Full-stack Web App & Database Systems', description: 'A community-driven platform for sharing positive affirmations to promote mental well-being.', challenge: 'Creating a safe, positive, and robust digital space for emotional support requires careful backend engineering, secure text handling, and an empathetic user interface.', mission: 'To engineer a platform with a complex PostgreSQL backend (including stored procedures and triggers) and a TypeScript frontend, allowing users to submit, browse, and favorite affirmations securely and anonymously.', tech: ['Python', 'TypeScript', 'PostgreSQL', 'Docker', 'HTML/CSS', 'JavaScript'], outcome: [ 'System supported 1000+ concurrent interactions with minimal latency in tests.', 'Query optimization and connection pooling led to a 35% improvement in load time.', 'Gained hands-on experience with advanced PostgreSQL features like PL/pgSQL.', 'Learned about designing for emotional impact and empathy in technology.'], interactive: 'affirmationLibrary' }, { id: 'env-simulator', tags: [], title: 'Environmental Impact Simulator', category: 'Java Desktop Application & Data Visualization', description: 'A Java Swing application to quantify and visualize the ecological impact of everyday human activities.', challenge: 'Many people are unaware of the tangible environmental footprint of their daily choices. The goal was to create a tool to raise awareness through data-driven insights.', mission: 'To develop a user-focused desktop application that allows detailed tracking of activities like travel and energy use, providing interactive visualizations and actionable recommendations for sustainable behavior.', tech: ['Java', 'Swing'], outcome: [ 'Serves as an effective educational tool to show unseen environmental costs.', 'Encourages greener choices through data-backed behavioral nudging.', 'Mastered Java Swing, object-oriented design, and data visualization principles.', 'Gained a deeper understanding of sustainability through simulation modeling.'], interactive: 'envSimulator' } ];
-        const techLogos = { 'Python': 'https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white', 'Flask': 'https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white', 'JavaScript': 'https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black', 'Gemini API': 'https://img.shields.io/badge/Gemini_API-4285F4?style=for-the-badge&logo=google-gemini&logoColor=white', 'Google Maps API': 'https://img.shields.io/badge/Google_Maps-4285F4?style=for-the-badge&logo=googlemaps&logoColor=white', 'MongoDB': 'https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white', 'HTML/CSS': 'https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white', 'Bootstrap': 'https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white', 'TensorFlow': 'https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white', 'Keras': 'https://img.shields.io/badge/Keras-D00000?style=for-the-badge&logo=keras&logoColor=white', 'OpenCV': 'https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white', 'Scikit-learn': 'https://img.shields.io/badge/scikit_learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white', 'Matplotlib': 'https://img.shields.io/badge/Matplotlib-11557c?style=for-the-badge&logo=matplotlib&logoColor=white', 'Pandas': 'https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white', 'XGBoost': 'https://img.shields.io/badge/XGBoost-006100?style=for-the-badge&logo=xgboost&logoColor=white', 'LightGBM': 'https://img.shields.io/badge/LightGBM-444444?style=for-the-badge&logo=lightgbm&logoColor=white', 'React.js': 'https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black', 'PostgreSQL': 'https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white', 'Docker': 'https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white', 'Redis': 'https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white', 'AWS': 'https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white', 'Stripe API': 'https://img.shields.io/badge/Stripe-626CD9?style=for-the-badge&logo=stripe&logoColor=white', 'PyTorch': 'https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white', 'FFmpeg': 'https://img.shields.io/badge/FFmpeg-007800?style=for-the-badge&logo=ffmpeg&logoColor=white', 'SyncNet': 'https://img.shields.io/badge/SyncNet-992244?style=for-the-badge&logoColor=white', 'ResNet-18': 'https://img.shields.io/badge/ResNet--18-8A2BE2?style=for-the-badge&logoColor=white', 'Conformer': 'https://img.shields.io/badge/Conformer-4682B4?style=for-the-badge&logoColor=white', 'Scapy': 'https://img.shields.io/badge/Scapy-E05A17?style=for-the-badge&logoColor=white', 'SQLite': 'https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white', 'Java': 'https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white', 'Swing': 'https://img.shields.io/badge/Swing-557c9b?style=for-the-badge&logoColor=white', 'TypeScript': 'https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white', };
+        const techLogos = { 'Python': 'https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white', 'Flask': 'https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white', 'JavaScript': 'https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black', 'Gemini API': 'https://img.shields.io/badge/Gemini_API-4285F4?style=for-the-badge&logo=google-gemini&logoColor=white', 'Google Maps API': 'https://img.shields.io/badge/Google_Maps-4285F4?style=for-the-badge&logo=googlemaps&logoColor=white', 'MongoDB': 'https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white', 'HTML/CSS': 'https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white', 'Bootstrap': 'https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white', 'TensorFlow': 'https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white', 'Keras': 'https://img.shields.io/badge/Keras-D00000?style=for-the-badge&logo=keras&logoColor=white', 'OpenCV': 'https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white', 'Scikit-learn': 'https://img.shields.io/badge/scikit_learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white', 'Matplotlib': 'https://img.shields.io/badge/Matplotlib-11557c?style=for-the-badge&logo=matplotlib&logoColor=white', 'Pandas': 'https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white', 'XGBoost': 'https://img.shields.io/badge/XGBoost-006100?style=for-the-badge&logo=xgboost&logoColor=white', 'LightGBM': 'https://img.shields.io/badge/LightGBM-444444?style=for-the-badge&logo=lightgbm&logoColor=white', 'React.js': 'https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black', 'PostgreSQL': 'https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white', 'Docker': 'https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white', 'Redis': 'https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white', 'AWS': 'https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white', 'Stripe API': 'https://img.shields.io/badge/Stripe-626CD9?style=for-the-badge&logo=stripe&logoColor=white', 'PyTorch': 'https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white', 'FFmpeg': 'https://img.shields.io/badge/FFmpeg-007800?style=for-the-badge&logo=ffmpeg&logoColor=white', 'SyncNet': 'https://img.shields.io/badge/SyncNet-992244?style=for-the-badge&logoColor=white', 'ResNet-18': 'https://img.shields.io/badge/ResNet--18-8A2BE2?style=for-the-badge&logo=resnet&logoColor=white', 'Conformer': 'https://img.shields.io/badge/Conformer-4682B4?style=for-the-badge&logoColor=white', 'Scapy': 'https://img.shields.io/badge/Scapy-E05A17?style=for-the-badge&logoColor=white', 'SQLite': 'https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white', 'Java': 'https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white', 'Swing': 'https://img.shields.io/badge/Swing-557c9b?style=for-the-badge&logoColor=white', 'TypeScript': 'https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white', };
 
         // --- Gemini API Integration (via Serverless Function) ---
         async function callGemini(prompt, retries = 3, delay = 1000) {
@@ -317,7 +382,7 @@
         }
 
         function showLoader(element) {
-            element.innerHTML = '<div class="flex justify-center items-center"><div class="loader"></div></div>';
+            element.innerHTML = '<div class="flex justify-center items-center h-full"><div class="loader"></div></div>';
             element.classList.remove('hidden');
         }
         
@@ -399,8 +464,9 @@
         const copilotResponse = document.getElementById('copilot-response');
         
         const portfolioContext = `
-            About Me: I'm an engineer passionate about building intelligent systems, with a focus on Machine Learning, AI, and Full Stack Development. My journey has taken me from architecting scalable backend platforms to fine-tuning complex NLP models. I am actively seeking opportunities as a Software Engineer, ML/AI Engineer, or Data Engineer where I can apply my skills to transform complex data into actionable insights and create meaningful, real-world solutions.
-            Education & Experience:
+            About Me: I'm an engineer passionate about building intelligent systems, with a focus on Machine Learning, AI, and Full Stack Development.
+            Current Status: Full-Time Software Engineering Intern at IpserLab Startup, LLC since September 2025.
+            Education & Experience Context:
             ${timelineItems.map(item => `- ${item.title} at ${item.company} (${item.date}): ${item.description.replace(/<br><br><strong>.*?<\/strong>.*|<[^>]*>/g, ' ')}`).join('\n')}
             Projects:
             ${projects.map(p => `- ${p.title}: ${p.description}`).join('\n')}
@@ -410,16 +476,16 @@
             if (e.key === 'Enter' && e.target.value) {
                 const query = e.target.value;
                 showLoader(copilotResponse);
-                const prompt = `You are a helpful portfolio assistant for Trupt Acharya. Based on the following context, answer the user's question concisely and conversationally.\n\nContext:\n${portfolioContext}\n\nUser Question: "${query}"\n\nAnswer:`;
+                const prompt = `You are a helpful portfolio assistant for Trupt Acharya. Based on the following context, answer the user's question concisely and conversationally. If they ask about your current job, mention IpserLab and AuraCam.\n\nContext:\n${portfolioContext}\n\nUser Question: "${query}"\n\nAnswer:`;
                 const responseText = await callGemini(prompt);
                 copilotResponse.innerHTML = responseText.replace(/\n/g, '<br>');
             }
         });
 
-        // --- UPDATED: Render Two-Sided Timeline with Spanning Boxes & Hover Effect ---
+        // --- Render Timeline ---
         const timelineContainer = document.getElementById('timeline-container');
         const startYear = 2019;
-        const endYear = 2025;
+        const endYear = 2026;
         const yearHeight = 250;
         const topPadding = 50;
 
@@ -440,12 +506,11 @@
             
             const topPos = topPadding + (endYear - item.endYear) * yearHeight;
             const duration = (item.endYear - item.startYear) || 0.75;
-            const height = (duration * yearHeight) + ((item.endYear - item.startYear) * 50);
+            const height = (duration * yearHeight) + ((item.endYear - item.startYear) * 60);
             
             entry.style.top = `${topPos}px`;
             entry.style.height = `${height}px`;
 
-            // REVERTED: Inner HTML now shows summary text by default
             entry.innerHTML = `
                 <div class="timeline-content glass-effect p-6 rounded-lg shadow-lg h-full">
                     <div class="summary-view flex flex-col justify-center items-center h-full text-center">
@@ -526,22 +591,11 @@
             else { interactiveContainer.innerHTML = `<p class="text-center text-slate-400">Details for this project are available upon request.</p>`; }
         }
 
-        // UPDATED: Restored the full loadInteractiveElement function
         async function loadInteractiveElement(container, type) {
             container.innerHTML = '';
             switch (type) {
                 case 'tripPlanner':
-                    container.innerHTML = `
-                        <h5 class="font-bold text-white text-center mb-4">Live Demo: AI Trip Planner</h5>
-                        <div class="space-y-4 max-w-md mx-auto">
-                             <div>
-                                <label for="trip-city" class="text-sm text-slate-300">Destination</label>
-                                <input id="trip-city" type="text" class="w-full mt-1 px-3 py-2 rounded-md bg-slate-800 border border-slate-600 focus:outline-none focus:ring-1 focus:ring-blue-500" value="Paris">
-                            </div>
-                            <button id="suggest-activities-btn" class="w-full bg-teal-600/80 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-md transition-colors flex items-center justify-center gap-2">✨ Suggest Activities with Gemini</button>
-                        </div>
-                        <div id="trip-output" class="mt-4 p-4 bg-slate-800 rounded-md text-slate-300 hidden"></div>
-                    `;
+                    container.innerHTML = `<h5 class="font-bold text-white text-center mb-4">Live Demo: AI Trip Planner</h5><div class="space-y-4 max-w-md mx-auto"><div><label for="trip-city" class="text-sm text-slate-300">Destination</label><input id="trip-city" type="text" class="w-full mt-1 px-3 py-2 rounded-md bg-slate-800 border border-slate-600 focus:outline-none focus:ring-1 focus:ring-blue-500" value="Paris"></div><button id="suggest-activities-btn" class="w-full bg-teal-600/80 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-md transition-colors flex items-center justify-center gap-2">✨ Suggest Activities with Gemini</button></div><div id="trip-output" class="mt-4 p-4 bg-slate-800 rounded-md text-slate-300 hidden"></div>`;
                     document.getElementById('suggest-activities-btn').addEventListener('click', async () => {
                         const city = document.getElementById('trip-city').value || 'Paris';
                         const outputDiv = document.getElementById('trip-output');
